@@ -1,0 +1,5 @@
+__pycache__
+*.pyc
+secret.py
+socialnetwork.sublime-project
+socialnetwork.sublime-workspace
