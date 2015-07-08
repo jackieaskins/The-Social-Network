@@ -1,25 +1,26 @@
-"""socialnetwork URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.8/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Add an import:  from blog import urls as blog_urls
-    2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
-"""
+from django import forms
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from registration.backends.default.views import RegistrationView
+from registration.forms import RegistrationForm
+from registration.users import UserModel, UsernameField
+
 from network import views as network_views
+
+
+class MyRegistrationForm(RegistrationForm):
+
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+
+    class Meta:
+        model = UserModel()
+        fields = ('first_name', 'last_name', UsernameField(), "email")
 
 urlpatterns = [
     url(r'^$', network_views.home, name='home'),
+    url(r'^accounts/register/$', RegistrationView.as_view(form_class=MyRegistrationForm)),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]

@@ -23,4 +23,15 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('/accounts/register', register_url)
 
         # Brad fills out the form on this page to create an account with TSN
-        self.fail('Finish the test!')
+        # and presses enter
+        for name, value in [('first_name', 'Brad'),
+                            ('last_name', 'Pitt'),
+                            ('username', 'brad'),
+                            ('email', 'tsnthesocialnetwork@gmail.com'),
+                            ('password1', 'bradiscool'),
+                            ('password2', 'bradiscool\n')]:
+            self.browser.find_element_by_name(name).send_keys(value)
+
+        # He finds himself on another page telling him to activate his account
+        p_text = self.browser.find_element_by_tag_name('p').text
+        self.assertEquals('Please check your email to complete the registration process.', p_text)
