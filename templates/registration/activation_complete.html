@@ -1,10 +1,11 @@
-{% extends "base.html" %}
+{% extends "registration/registration_base.html" %}
+
 {% load i18n %}
 
-{% block title %}{% trans "Account Activated" %}{% endblock %}
-
+{% block title %}Account Activated{% endblock title %}
+{% block header_text %}Account Activated{% endblock header_text %}
 {% block content %}
-<p>
+<p class="text-center">
     {% trans "Your account is now activated." %}
     {% if not user.is_authenticated %}
     {% trans "You can log in." %}

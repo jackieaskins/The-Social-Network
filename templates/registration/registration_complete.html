@@ -1,10 +1,11 @@
 {% extends "registration/registration_base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Activation email sent" %}{% endblock %}
+{% block title %}{% trans "Activation Email Sent" %}{% endblock %}
 
+{% block header_text %}Activation Email Sent{% endblock header_text %}
 {% block content %}
-<p>{% trans "Please check your email to complete the registration process." %}</p>
+  <p class="text-center">{% trans "Please check your email to complete the registration process." %}</p>
 {% endblock %}
 
 

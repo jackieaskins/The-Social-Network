@@ -1,1 +1,24 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+  <div class="page-header">
+    <h1 class="text-center">{% block header_text %}Welcome{% endblock header_text %}</h1>
+  </div>
+{% endblock header %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% block pre_content %}{% endblock pre_content %}
+      <form method="post" action="">
+          {% csrf_token %}
+          {{ form|crispy }}
+          {% block button %}<button type="submit" class="btn btn-primary">Submit</button>{% endblock button %}
+      </form>
+      {% block extra_content %}{% endblock extra_content %}
+    </div>
+  </div>
+{% endblock %}

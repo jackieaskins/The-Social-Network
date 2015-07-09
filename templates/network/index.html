@@ -1,6 +1,27 @@
 {% extends "base.html" %}
 
+{% block header %}
+  <br />
+  <div class="jumbotron text-center">
+    {% if user.is_authenticated %}
+    <h1>Welcome back {% if user.first_name %}{{ user.first_name }}{% else %}{{ user }}{% endif %}!</h1>
+    {% else %}
+    <h1>Welcome to TSN<br />(The Social Network)</h1>
+    {% endif %}
+  </div>
+{% endblock header %}
+
 {% block content %}
-  <h1>Welcome to TSN (The Social Network)</h1>
-  <a id="register" href="{% url 'registration_register' %}">Register for TSN now!</a>
+  {% if user.is_authenticated %}
+  <p>Nice to see you again! We really missed you!</p>
+  {% else %}
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-1">
+      <h3>The Social Network (TSN) is the social network of the future. If you aren't a part of it yet, you're missing out. But have no fear, it's not too late. <a id="register" href="{% url 'registration_register' %}">Register</a> today!</h3>
+    </div>
+    <div class="col-sm-4 col-sm-offset-2">
+      <h3>If you're already registered, then all of that doesn't pertain to you. In fact, we here at TSN really appreciate you. So go ahead and <a id="login" href="{% url 'auth_login' %}">login</a>.</h3>
+    </div>
+  </div>
+  {% endif %}
 {% endblock content %}

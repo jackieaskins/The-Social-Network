@@ -40,6 +40,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    # My apps
+    'network',
+    # Third party apps
+    'crispy_forms',
     'registration',
 )
 
@@ -121,3 +125,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_AUTO_LOGIN = True
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
+
+# Crispy-Forms settings
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
