@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load crispy_forms_tags %}
+{% load humanize %}
 
 {% block header %}
   <br />
@@ -15,15 +16,28 @@
   {% if user.is_authenticated %}
 
   <div class="row">
-    <div class="col-sm-4 col-sm-offset-4">
+    <div class="col-sm-6 col-sm-offset-3">
       <p>Hey {% if user.first_name %}{{ user.first_name }}{% else %}{{ user }}{% endif %}, something on your mind?</p>
       <form method="post" action="">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-primary pull-right">Post</button>
+        <button type="submit" class="btn btn-primary pull-right post_button">Post</button>
       </form>
     </div>
   </div>
+
+  <br />
+  {% if posts %}
+  {% for post in posts %}
+  <div class="col-sm-6 col-sm-offset-3 well status_post">
+    <h5>{{ post.user.get_full_name }} - {{ post.post_date|naturaltime }}</h5><br />
+    <span id="post_text">{{ post.text }}</span><br /><br />
+    <a href="">Like</a> • <a href="">Comment</a>
+    <hr />
+      {{ post.likes }} likes
+  </div>
+  {% endfor %}
+  {% endif %}
 
   {% else %}
   <div class="row">

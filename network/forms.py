@@ -9,6 +9,7 @@ class StatusPostForm(forms.ModelForm):
             'placeholder': "Tell us what's happening!",
             'id': 'new_post',
             'rows': 5,
+            'style': 'resize:none'
         }),
         error_messages={'required': "Hey there! I don't think you typed anything..."}
     )

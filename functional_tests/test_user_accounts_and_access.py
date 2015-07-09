@@ -1,5 +1,4 @@
 from .base import FunctionalTest
-
 from registration.users import UserModel
 
 
@@ -9,7 +8,7 @@ class NewVisitorTest(FunctionalTest):
         # Tired of Twitter, Facebook, and Instagram Brad has luckily heard
         # about the new social network on the block so he visits the website in
         # his browser
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.live_server_url + '/')
 
         # He notices that the title mentions TSN (so much cooler than Twitter
         # or Facebook) AND the page welcomes him to the site
@@ -64,4 +63,18 @@ class NewVisitorTest(FunctionalTest):
         )
 
         # She enters some text into the post box and presses enter
-        postbox.send_keys('TSN is actually the best...\n')
+        postbox.send_keys('TSN is actually the best...\t\n')
+
+        # The page does a quick refresh and now her post now appears on the
+        # page
+        posts = self.browser.find_elements_by_id('post_text')
+        self.assertIn('TSN is actually the best...', [post.text for post in posts])
+
+        # Sally is so impressed that she decides to make another post
+        # explaining just how impressed she is
+        postbox = self.browser.find_element_by_id('new_post')
+        postbox.send_keys('I AM SOOOOOO IMPRESSED\t\n')
+
+        # Again, her post appears on the page, above the other post
+        posts = self.browser.find_elements_by_class_name('status_post')
+        self.assertIn('I AM SOOOOOO IMPRESSED', posts[0].text)

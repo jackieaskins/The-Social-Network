@@ -1,15 +1,11 @@
-from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase
-
-from network.views import home
 
 
 class HomeViewTest(TestCase):
 
     def test_home_page_returns_correct_html(self):
-        request = HttpRequest()
-        response = home(request)
+        response = self.client.get('/')
         expected_html = render_to_string('network/index.html')
         self.assertEqual(response.content.decode(), expected_html)
 

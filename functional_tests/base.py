@@ -2,6 +2,9 @@ from django.test import LiveServerTestCase
 
 from selenium import webdriver
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 class FunctionalTest(LiveServerTestCase):
 
