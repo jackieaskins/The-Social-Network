@@ -20,7 +20,8 @@ class MyRegistrationForm(RegistrationForm):
 
 urlpatterns = [
     url(r'^$', network_views.home, name='home'),
-    url(r'^accounts/register/$', RegistrationView.as_view(form_class=MyRegistrationForm)),
+    url(r'^accounts/register/$', RegistrationView.as_view(form_class=MyRegistrationForm),
+        name='registration_register'),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
