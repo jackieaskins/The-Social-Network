@@ -33,17 +33,24 @@ class NewVisitorTest(FunctionalTest):
                             ('password2', 'bradiscool\n')]:
             self.browser.find_element_by_name(name).send_keys(value)
 
-        # After filling out this form, Brad winds up on another page asking for
-        # him to continue registration
-        self.assertIn("Continue Registration", self.browser.title)
+        # He finds himself on another page telling him to activate his account
+        p_text = self.browser.find_element_by_tag_name('p').text
+        self.assertEquals('Please check your email to complete the registration process.', p_text)
+
+        # After activating, Brad returns to the home page
+        self.browser.get(self.live_server_url + '/')
+
+        # He is them immediately redirected to a page asking him to create a
+        # profile
+        self.assertIn('Create Profile', self.browser.title)
 
         # He provides his birthday and his gender
         self.browser.find_element_by_name('birthday').send_keys('12/18/1963')
         self.browser.find_element_by_name('gender').send_keys('M\t\n')
 
-        # He finds himself on another page telling him to activate his account
-        p_text = self.browser.find_element_by_tag_name('p').text
-        self.assertEquals('Please check your email to complete the registration process.', p_text)
+        # He is now on the homepage again, this time he sees a post box
+        self.assertEqual(self.live_server_url + '/', self.browser.current_url)
+        self.assertIn('new_post', self.browser.text)
 
     def test_registered_users_can_view_posts(self):
 

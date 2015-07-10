@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import StatusPost, UserProfile
+from .models import StatusPost
 
 
 class StatusPostForm(forms.ModelForm):
@@ -21,17 +21,3 @@ class StatusPostForm(forms.ModelForm):
     class Meta:
         model = StatusPost
         fields = ('text',)
-
-
-class UserProfileForm(forms.ModelForm):
-    birthday = forms.DateField(
-        widget=forms.DateInput(attrs={
-            'placeholder': 'Format: mm/dd/YYYY'
-        }),
-        input_formats=['%m/%d/%Y'],
-        error_messages={'invalid': 'Be sure to use the correct format (mm/dd/YYYY).'}
-    )
-
-    class Meta:
-        model = UserProfile
-        fields = ('profile_picture', 'birthday', 'gender')

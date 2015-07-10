@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from network.models import StatusPost, UserProfile
+from network.models import StatusPost
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -52,35 +52,3 @@ class StatusPostTest(ModelTestCase):
             post.user = self.generate_user('bob')
             post.save()
             post.full_clean()
-
-
-class UserProfileTest(ModelTestCase):
-
-    def test_profile_pictures_default_correctly(self):
-
-        user1 = self.generate_user('user1')
-        user2 = self.generate_user('user2')
-        user3 = self.generate_user('user3')
-
-        first_profile = UserProfile()
-        first_profile.user = user1
-        first_profile.gender = 'M'
-        first_profile.birthday = '1995-04-28'
-        first_profile.save()
-
-        second_profile = UserProfile()
-        second_profile.user = user2
-        second_profile.gender = 'F'
-        second_profile.birthday = '1996-07-15'
-        second_profile.save()
-
-        third_profile = UserProfile()
-        third_profile.user = user3
-        third_profile.gender = 'F'
-        third_profile.birthday = '1996-04-24'
-        third_profile.profile_picture = PROF_PIC_ROOT + '/dog.jpg'
-        third_profile.save()
-
-        self.assertEqual(first_profile.profile_picture, PROF_PIC_ROOT + '/default_male.png')
-        self.assertEqual(second_profile.profile_picture, PROF_PIC_ROOT + '/default_female.png')
-        self.assertEqual(third_profile.profile_picture, PROF_PIC_ROOT + '/dog.jpg')
