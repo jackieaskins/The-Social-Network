@@ -1,5 +1,6 @@
 from django.contrib import admin
-from network.models import StatusPost
+
+from .models import StatusPost
 
 
 class StatusPostAdmin(admin.ModelAdmin):

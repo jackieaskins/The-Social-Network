@@ -28,10 +28,19 @@ class NewVisitorTest(FunctionalTest):
         for name, value in [('first_name', 'Brad'),
                             ('last_name', 'Pitt'),
                             ('username', 'brad'),
-                            ('email', 'tsnthesocialnetwork@gmail.com'),
+                            ('email', 'bradtheman@btm.com'),
                             ('password1', 'bradiscool'),
                             ('password2', 'bradiscool\n')]:
             self.browser.find_element_by_name(name).send_keys(value)
+
+        # After filling out this form, Brad winds up on another page asking for
+        # him to continue registration
+        self.assertIn("Continue Registration", self.browser.title)
+
+        # He provides his birthday and his gender
+        self.browser.find_element_by_name('birthday').send_keys('12/18/1963')
+        self.browser.find_element_by_id('male').click()
+        self.browser.send_keys('\t\n')
 
         # He finds himself on another page telling him to activate his account
         p_text = self.browser.find_element_by_tag_name('p').text

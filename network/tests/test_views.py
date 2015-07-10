@@ -1,6 +1,9 @@
 from django.template.loader import render_to_string
 from django.test import TestCase
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 class HomeViewTest(TestCase):
 

@@ -1,6 +1,6 @@
 from django import forms
 
-from network.models import StatusPost
+from .models import StatusPost
 
 
 class StatusPostForm(forms.ModelForm):

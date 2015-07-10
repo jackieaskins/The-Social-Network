@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
-from network.forms import StatusPostForm
-from network.models import StatusPost
+from .forms import StatusPostForm
+from .models import StatusPost
 
 
 def home(request):

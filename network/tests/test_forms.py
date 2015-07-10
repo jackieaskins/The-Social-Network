@@ -2,6 +2,9 @@ from django.test import TestCase
 
 from network.forms import StatusPostForm
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 class StatusPostFormTest(TestCase):
 

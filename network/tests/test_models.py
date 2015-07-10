@@ -1,19 +1,24 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from network.models import StatusPost
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 class StatusPostTest(TestCase):
 
-    def test_saving_and_retrieving_status_posts(self):
+    def generate_user(self, user_name):
         User = get_user_model()
-        user1 = User.objects.create(
-            username='woo', password='123', first_name='John', last_name='Sky', email='woo@woo.com'
+        return User.objects.create(
+            username=user_name, password='1', first_name='John', last_name='Doe', email="jd@jd.com"
         )
-        user2 = User.objects.create(
-            username='yoo', password='123', first_name='Alex', last_name='Sun', email='yoo@yoo.com'
-        )
+
+    def test_saving_and_retrieving_status_posts(self):
+        user1 = self.generate_user('woo')
+        user2 = self.generate_user('yoo')
 
         first_post = StatusPost()
         first_post.text = 'The Social Network is soooooooo cool! Wooo!'
@@ -35,3 +40,10 @@ class StatusPostTest(TestCase):
         self.assertEqual(first_saved_post.user, user1)
         self.assertEqual(second_saved_post.user, user2)
         self.assertEqual(first_saved_post.likes, 0)
+
+    def test_cannot_save_empty_status_posts(self):
+        post = StatusPost(text='')
+        with self.assertRaises(ValidationError):
+            post.user = self.generate_user('bob')
+            post.save()
+            post.full_clean()
