@@ -10,7 +10,7 @@ def home(request):
 
     if request.user.is_authenticated():
         form = StatusPostForm(request.POST or None)
-        error = None
+        errors = None
         posts = StatusPost.objects.all().filter(user=request.user).order_by('-post_date')
 
         if form.is_valid():
@@ -19,11 +19,11 @@ def home(request):
             status_post.save()
             return redirect('/')
         else:
-            error = form.errors
+            errors = form.errors
 
         context = {
             'form': form,
-            'errors': error,
+            'errors': errors,
             'posts': posts,
         }
 

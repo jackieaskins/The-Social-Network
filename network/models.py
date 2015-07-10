@@ -33,3 +33,6 @@ class UserProfile(models.Model):
         elif (not self.profile_picture) and (self.gender == 'F'):
             self.profile_picture = PROF_PIC_ROOT + '/default_female.png'
         super(UserProfile, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.user

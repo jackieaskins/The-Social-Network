@@ -39,8 +39,7 @@ class NewVisitorTest(FunctionalTest):
 
         # He provides his birthday and his gender
         self.browser.find_element_by_name('birthday').send_keys('12/18/1963')
-        self.browser.find_element_by_id('male').click()
-        self.browser.send_keys('\t\n')
+        self.browser.find_element_by_name('gender').send_keys('M\t\n')
 
         # He finds himself on another page telling him to activate his account
         p_text = self.browser.find_element_by_tag_name('p').text
