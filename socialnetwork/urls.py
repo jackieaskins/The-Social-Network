@@ -24,4 +24,5 @@ urlpatterns = [
         name='registration_register'),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^profile/', include('profiles.urls')),
 ]

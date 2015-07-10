@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from network.models import StatusPost
+from ..models import StatusPost
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)

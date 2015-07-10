@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Create Profile{% endblock title %}
+
+{% block content %}
+  <div class="page-header">
+    <h1 class="text-center">Create User Profile</h1>
+  </div>
+
+  {% if profile_exists %}
+  <p class="text-center">You already created a profile.</p>
+  <br />
+  {% else %}
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <p class="text-center">We just need a few more things before you can begin using the site.</p>
+      <br />
+      <form method="post" action="">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary pull-right">Create</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+{% endblock content %}

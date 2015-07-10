@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from profiles.forms import UserProfileForm
+from ..forms import UserProfileForm
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
