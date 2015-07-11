@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 
+from sorl.thumbnail import ImageField
+
 
 class UserProfile(models.Model):
     GENDER_CHOICES = (
@@ -11,7 +13,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     birthday = models.DateField()
-    profile_picture = models.ImageField(blank=True, upload_to='profile_pictures')
+    profile_picture = ImageField(blank=True, upload_to='profile_pictures')
 
     def save(self, *args, **kwargs):
         if (not self.profile_picture) and (self.gender == 'M'):

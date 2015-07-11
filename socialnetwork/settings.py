@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     # Third party apps
     'crispy_forms',
     'registration',
+    'sorl.thumbnail',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -137,3 +138,5 @@ LOGIN_REDIRECT_URL = '/'
 # Crispy-Forms settings
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+THUMBNAIL_DEBUG = True

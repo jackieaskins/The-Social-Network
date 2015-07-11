@@ -1,14 +1,16 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 
+from sorl.thumbnail.admin import AdminImageMixin
+
 from .models import UserProfile
 
 
-class UserProfileInline(admin.StackedInline):
+class UserProfileInline(AdminImageMixin, admin.StackedInline):
     model = UserProfile
 
 
-class UserProfileAdmin(admin.ModelAdmin):
+class UserProfileAdmin(AdminImageMixin, admin.ModelAdmin):
     list_display = ('user', 'birthday', 'gender', 'profile_picture')
 
 
