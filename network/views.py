@@ -14,15 +14,17 @@ def home(request):
         form = StatusPostForm(request.POST or None)
         errors = None
         posts = StatusPost.objects.all().filter(user=request.user.id).order_by('-post_date')
+        user_profile = None
 
         try:
-            UserProfile.objects.get(user=request.user.id)
+            user_profile = UserProfile.objects.get(user=request.user.id)
         except UserProfile.DoesNotExist:
             return redirect(reverse('create_profile'))
 
         if form.is_valid():
             status_post = form.save(commit=False)
             status_post.user = request.user
+            status_post.user_profile = user_profile
             status_post.save()
             return redirect(reverse('home'))
         else:

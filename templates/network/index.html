@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
 {% load crispy_forms_tags %}
 {% load humanize %}
 
@@ -30,7 +31,10 @@
   {% if posts %}
   {% for post in posts %}
   <div class="col-sm-6 col-sm-offset-3 well status_post">
-    <h5>{{ post.user.get_full_name }} - {{ post.post_date|naturaltime }}</h5><br />
+    <div class="row">
+      {{ post.user.get_full_name }}<br />
+      {{ post.post_date|naturaltime }}
+    </div>
     <span id="post_text">{{ post.text }}</span><br /><br />
     <a href="">Like</a> • <a href="">Comment</a>
     <hr />

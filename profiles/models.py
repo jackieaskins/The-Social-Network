@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.db import models
 
-PROF_PIC_ROOT = settings.MEDIA_ROOT + '/profile_pictures'
-
 
 class UserProfile(models.Model):
     GENDER_CHOICES = (
@@ -17,9 +15,9 @@ class UserProfile(models.Model):
 
     def save(self, *args, **kwargs):
         if (not self.profile_picture) and (self.gender == 'M'):
-            self.profile_picture = PROF_PIC_ROOT + '/default_male.png'
+            self.profile_picture = 'profile_pictures/default_male.png'
         elif (not self.profile_picture) and (self.gender == 'F'):
-            self.profile_picture = PROF_PIC_ROOT + '/default_female.png'
+            self.profile_picture = 'profile_pictures/default_female.png'
         super(UserProfile, self).save(*args, **kwargs)
 
     def __str__(self):

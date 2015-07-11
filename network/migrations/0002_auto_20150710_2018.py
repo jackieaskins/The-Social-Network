@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import django.utils.timezone
 
 
 class Migration(migrations.Migration):
@@ -12,14 +11,15 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='statuspost',
-            name='post_date',
-            field=models.DateTimeField(default=django.utils.timezone.now),
+            name='user',
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='statuspost',
-            name='update_date',
-            field=models.DateTimeField(default=django.utils.timezone.now),
+            name='user_profile',
+        ),
+        migrations.DeleteModel(
+            name='StatusPost',
         ),
     ]

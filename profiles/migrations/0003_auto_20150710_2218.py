@@ -7,15 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('network', '0003_userprofile'),
+        ('profiles', '0002_auto_20150710_2104'),
     ]
 
     operations = [
-        migrations.RemoveField(
+        migrations.AlterField(
             model_name='userprofile',
-            name='user',
-        ),
-        migrations.DeleteModel(
-            name='UserProfile',
+            name='profile_picture',
+            field=models.ImageField(blank=True, upload_to='profile_pictures'),
         ),
     ]

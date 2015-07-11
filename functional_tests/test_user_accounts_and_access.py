@@ -7,7 +7,7 @@ from registration.users import UserModel
 
 class NewVisitorTest(FunctionalTest):
 
-    def test_users_can_fill_out_registration_form_and_create_profile_are_redirected(self):
+    def test_users_can_fill_out_registration_form_and_create_profile(self):
         # Tired of Twitter, Facebook, and Instagram Brad has luckily heard
         # about the new social network on the block so he visits the website in
         # his browser

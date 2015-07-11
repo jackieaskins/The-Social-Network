@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
@@ -7,7 +6,7 @@ from ..models import UserProfile
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-PROF_PIC_ROOT = settings.MEDIA_ROOT + '/profile_pictures'
+PROF_PIC_ROOT = 'profile_pictures'
 
 
 class ModelTestCase(TestCase):
