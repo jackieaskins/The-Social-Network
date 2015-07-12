@@ -16,13 +16,12 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-
   <div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
+    <div class="col-sm-5">
       <p>Hey {% if user.first_name %}{{ user.first_name }}{% else %}{{ user }}{% endif %}, something on your mind?</p>
       <form method="post" action="">
         {% csrf_token %}
-        {{ form|crispy }}
+        {{ post_form|crispy }}
         <button type="submit" class="btn btn-primary pull-right post_button">Post</button>
       </form>
     </div>
@@ -31,22 +30,34 @@
   <br />
   {% if posts %}
   {% for post in posts %}
-  <div class="col-sm-6 col-sm-offset-3 well status_post">
-    <div class="row">
-      <div class="col-sm-2">
-        {% thumbnail post.user_profile.profile_picture "80x80" as im %}
+  <div class="row">
+    <div class="col-sm-5 status_post well">
+      {% thumbnail post.user_profile.profile_picture "x50" as im %}
+        <img src="{{ im.url }}">
+      {% endthumbnail %}
+      {{ post.user.get_full_name }} - {{ post.post_date|naturaltime }}
+      <br /><br />
+      <span id="post_text">{{ post.text }}</span><br /><br />
+      <a href="">Like</a> • <a href="">Comment</a>
+      <hr />
+      {{ post.likes }} likes
+      <br /><br />
+      <form method="post" action="{% url 'add_comment' post.id %}">
+        {% csrf_token %}
+        {{ comment_form|crispy }}
+        <button type="submit" class="btn btn-primary btn-sm pull-right">Comment</button>
+      </form>
+      <br /><br />
+      {% for comment in comments %}
+      {% if comment.status_post == post %}
+        {% thumbnail comment.user_profile.profile_picture "x30" as im %}
           <img src="{{ im.url }}">
         {% endthumbnail %}
-      </div>
-      <div class="col-sm-10">
-        {{ post.user.get_full_name }} <br /> {{ post.post_date|naturaltime }}
-      </div>
+        {{ comment.user.get_full_name }} - <span id="comment_text">{{ comment.text }}</span><br />
+        {{ comment.likes }} likes • <a href="">Like</a> • {{ comment.post_date|naturaltime }}
+      {% endif %}
+      {% endfor %}
     </div>
-    <br />
-    <span id="post_text">{{ post.text }}</span><br /><br />
-    <a href="">Like</a> • <a href="">Comment</a>
-    <hr />
-      {{ post.likes }} likes
   </div>
   {% endfor %}
   {% endif %}

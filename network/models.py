@@ -27,4 +27,4 @@ class StatusComment(models.Model):
     update_date = models.DateTimeField(default=now)
 
     def __str__(self):
-        return "%s - %s" (self.user, self.text[:50])
+        return "%s - %s" % (self.user, self.text[:50])

@@ -98,8 +98,8 @@ class NewVisitorTest(FunctionalTest):
 
         # The page does a quick refresh and now her post now appears on the
         # page
-        posts = self.browser.find_elements_by_id('post_text')
-        self.assertIn('TSN is actually the best...', [post.text for post in posts])
+        post = self.browser.find_element_by_class_name('status_post')
+        self.assertIn('TSN is actually the best...', post.text)
 
         # Sally is so impressed that she decides to make another post
         # explaining just how impressed she is
