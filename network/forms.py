@@ -27,6 +27,7 @@ class StatusCommentForm(forms.ModelForm):
     text = forms.CharField(
         widget=forms.Textarea(attrs={
             'placeholder': "Did you want to add something?",
+            'id': 'new_comment',
             'rows': 2,
             'style': 'resize:none'
         }),

@@ -8,12 +8,12 @@ class StatusCommentInline(admin.StackedInline):
 
 
 class StatusPostAdmin(admin.ModelAdmin):
-    list_display = ('user', 'user_profile', 'text', 'likes', 'post_date')
+    list_display = ('user_profile', 'text', 'likes', 'post_date')
     inlines = (StatusCommentInline, )
 
 
 class StatusCommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'user_profile', 'status_post', 'likes', 'text', 'post_date')
+    list_display = ('user_profile', 'status_post', 'likes', 'text', 'post_date')
 
 admin.site.register(StatusPost, StatusPostAdmin)
 admin.site.register(StatusComment, StatusCommentAdmin)

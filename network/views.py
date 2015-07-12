@@ -16,20 +16,19 @@ def home(request):
         comment_form = StatusCommentForm()
         errors = None
         comments = []
-        posts = StatusPost.objects.all().filter(user=request.user.id).order_by('-post_date')
         user_profile = None
-
-        for post in posts:
-            comments += StatusComment.objects.all().filter(status_post=post.id)
 
         try:
             user_profile = UserProfile.objects.get(user=request.user.id)
         except UserProfile.DoesNotExist:
             return redirect(reverse('create_profile'))
 
+        posts = StatusPost.objects.all().filter(user_profile=user_profile).order_by('-post_date')
+        for post in posts:
+            comments += StatusComment.objects.all().filter(status_post=post.id)
+
         if post_form.is_valid():
             status_post = post_form.save(commit=False)
-            status_post.user = request.user
             status_post.user_profile = user_profile
             status_post.save()
             return redirect(reverse('home'))
@@ -57,17 +56,17 @@ def add_comment(request, post_id):
     comment_form = StatusCommentForm(request.POST)
     errors = None
     comments = []
-    posts = StatusPost.objects.all().filter(user=request.user.id).order_by('-post_date')
     user_profile = None
     status_post = StatusPost.objects.get(id=post_id)
-
-    for post in posts:
-        comments += StatusComment.objects.all().filter(status_post=post.id)
 
     try:
         user_profile = UserProfile.objects.get(user=request.user.id)
     except UserProfile.DoesNotExist:
         return redirect(reverse('create_profile'))
+
+    posts = StatusPost.objects.all().filter(user_profile=user_profile).order_by('-post_date')
+    for post in posts:
+            comments += StatusComment.objects.all().filter(status_post=post.id)
 
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)

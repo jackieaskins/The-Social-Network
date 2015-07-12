@@ -61,7 +61,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertEqual(self.live_server_url + reverse('home'), self.browser.current_url)
         self.assertIn('new_post', self.browser.page_source)
 
-    def test_registered_users_can_view_posts(self):
+    def test_registered_users_can_make_posts_view_posts_and_make_comments(self):
 
         # Sally is already a user of The Social Network (go Sally!)
         sally = UserModel().objects.create_user(
@@ -96,10 +96,18 @@ class NewVisitorTest(FunctionalTest):
         # She enters some text into the post box and presses enter
         postbox.send_keys('TSN is actually the best...\t\n')
 
-        # The page does a quick refresh and now her post now appears on the
-        # page
+        # The page does a quick refresh and her post now appears on the page
         post = self.browser.find_element_by_class_name('status_post')
         self.assertIn('TSN is actually the best...', post.text)
+
+        # Sally's feeling a little overzealous and decides to comment on her
+        # own post
+        commentbox = self.browser.find_element_by_id('new_comment')
+        commentbox.send_keys('WOW, COMMENTS TOO?\t\n')
+
+        # After posting, she finds that her comment is on the page
+        comment = self.browser.find_element_by_class_name('status_comment')
+        self.assertIn('WOW, COMMENTS TOO?', comment.text)
 
         # Sally is so impressed that she decides to make another post
         # explaining just how impressed she is
