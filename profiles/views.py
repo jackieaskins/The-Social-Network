@@ -50,4 +50,4 @@ def view_profile(request, username):
         'user_profile': user_profile,
         'age': age,
     }
-    return render(request, 'profiles/view_profile.html', context)
+    return render(request, 'profiles/profile_view.html', context)
