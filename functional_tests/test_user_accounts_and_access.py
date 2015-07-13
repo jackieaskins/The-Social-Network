@@ -1,7 +1,6 @@
 from django.core.urlresolvers import reverse
 
 from .base import FunctionalTest
-from profiles.models import UserProfile
 from registration.users import UserModel
 
 
@@ -41,17 +40,17 @@ class NewVisitorTest(FunctionalTest):
         self.assertEquals('Please check your email to complete the registration process.', p_text)
 
         # After activating, he goes to the login page and logs in
-        brad = UserModel().objects.all()[0]
+        brad = UserModel().objects.get(username='brad')
         brad.is_active = True
         brad.save()
         self.browser.get(self.live_server_url + reverse('auth_login'))
         self.browser.find_element_by_name('username').send_keys('brad')
         self.browser.find_element_by_name('password').send_keys('bradiscool\t\n')
 
-        # He is them immediately redirected to a page asking him to create a
+        # He is then immediately redirected to a page asking him to create a
         # profile
         self.browser.implicitly_wait(3)
-        self.browser.get(self.live_server_url + reverse('home'))
+        self.assertIn('profile/create', self.browser.current_url)
 
         # He provides his birthday and his gender
         self.browser.find_element_by_name('birthday').send_keys('12/18/1963')
@@ -61,24 +60,10 @@ class NewVisitorTest(FunctionalTest):
         self.assertEqual(self.live_server_url + reverse('home'), self.browser.current_url)
         self.assertIn('new_post', self.browser.page_source)
 
-    def test_registered_users_can_make_posts_view_posts_and_make_comments(self):
+    def test_registered_users_can_make_posts_and_comments(self):
 
-        # Sally is already a user of The Social Network (go Sally!)
-        sally = UserModel().objects.create_user(
-            first_name='Sally',
-            last_name='Hayes',
-            username='sally',
-            email='sally@127.0.0.1:8081',
-            password='sallyiscooler'
-        )
-        sally_profile = UserProfile()
-        sally_profile.user = sally
-        sally_profile.birthday = '1985-07-22'
-        sally_profile.gender = 'F'
-        sally_profile.save()
-
-        # Since TSN is so awesome, Sally comes to login as she does almost
-        # every day
+        # Sally is already a user of The Social Network (go Sally!) Since TSN
+        # is so awesome, Sally comes to login
         self.browser.get(self.live_server_url + '/accounts/login')
         self.browser.find_element_by_name('username').send_keys('sally')
         self.browser.find_element_by_name('password').send_keys('sallyiscooler\n')
@@ -117,3 +102,24 @@ class NewVisitorTest(FunctionalTest):
         # Again, her post appears on the page, above the other post
         posts = self.browser.find_elements_by_class_name('status_post')
         self.assertIn('I AM SOOOOOO IMPRESSED', posts[0].text)
+
+    def test_registered_users_can_view_their_own_profile(self):
+
+        # Sally's back and she's logging in again
+        self.browser.get(self.live_server_url + '/accounts/login')
+        self.browser.find_element_by_name('username').send_keys('sally')
+        self.browser.find_element_by_name('password').send_keys('sallyiscooler\n')
+
+        # She decides that she wants to check out her profile now and clicks
+        # the 'My Profile' link in the navigation bar
+        self.browser.implicitly_wait(3)
+        self.browser.find_element_by_id('my_profile').click()
+
+        # She sees that her username is in the website url
+        self.assertIn('sally', self.browser.current_url)
+
+        # She also notices that her full name, age, birthday, and gender appear
+        # on the page
+        page_source = self.browser.page_source
+        for value in ['Your Profile', 'Sally Hayes', 'Age:', 'Female', 'July 22, 1985']:
+            self.assertIn(value, page_source)
