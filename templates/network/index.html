@@ -41,17 +41,22 @@
        - {{ post.post_date|naturaltime }}
       <br /><br />
       <span id="post_text">{{ post.text }}</span><br /><br />
-      <a href="">Like</a> • <a href="">Comment</a>
+      <button type="button" class="btn btn-primary btn-xs" id="status_like">
+        <span class="glyphicon glyphicon-thumbs-up"></span> Like
+      </button>
+      <button id="comment" class="btn btn-primary btn-xs" type="button">
+        <span class="glyphicon glyphicon-comment"></span> Comment
+      </button>
       <hr />
       {{ post.likes }} likes
 
-      <br /><br />
-      <form method="post" action="{% url 'add_comment' post.id %}">
+      <form style="display: none;" id="comment_box" method="post" action="{% url 'add_comment' post.id %}">
+        <br /><br />
         {% csrf_token %}
         {{ comment_forms|get_item:post.id|crispy }}
         <button type="submit" class="btn btn-primary btn-sm pull-right">Comment</button>
+        <br /><br />
       </form>
-      <br /><br />
 
       {% if comments %}
       {% for comment in comments %}
@@ -89,3 +94,7 @@
   </div>
   {% endif %}
 {% endblock content %}
+
+{% block extra_scripts %}
+<script src="{% static 'network/js/network-ajax.js' %}"></script>
+{% endblock extra_scripts %}

@@ -87,6 +87,7 @@ class NewVisitorTest(FunctionalTest):
 
         # Sally's feeling a little overzealous and decides to comment on her
         # own post
+        self.browser.find_element_by_id('comment').click()
         commentbox = self.browser.find_element_by_id('new_comment')
         commentbox.send_keys('WOW, COMMENTS TOO?\t\n')
 
