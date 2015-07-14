@@ -4,6 +4,7 @@
 {% load crispy_forms_tags %}
 {% load humanize %}
 {% load thumbnail %}
+{% load network_extras %}
 
 {% block header %}
   <br />
@@ -35,6 +36,7 @@
       {% thumbnail post.user_profile.profile_picture "x50" as im %}
         <img src="{{ im.url }}">
       {% endthumbnail %}
+
       <a href="{% url 'view_profile' post.user_profile.user.username %}">{{ post.user_profile.user.get_full_name }}</a>
        - {{ post.post_date|naturaltime }}
       <br /><br />
@@ -42,10 +44,11 @@
       <a href="">Like</a> • <a href="">Comment</a>
       <hr />
       {{ post.likes }} likes
+
       <br /><br />
       <form method="post" action="{% url 'add_comment' post.id %}">
         {% csrf_token %}
-        {{ comment_form|crispy }}
+        {{ comment_forms|get_item:post.id|crispy }}
         <button type="submit" class="btn btn-primary btn-sm pull-right">Comment</button>
       </form>
       <br /><br />

@@ -12,35 +12,45 @@ def home(request):
     context = {}
 
     if request.user.is_authenticated():
-        post_form = StatusPostForm(request.POST or None)
-        comment_form = StatusCommentForm()
-        errors = None
         comments = []
-        user_profile = None
-
+        comment_forms = {}
+        errors = None
         try:
             user_profile = UserProfile.objects.get(user=request.user.id)
         except UserProfile.DoesNotExist:
-            return redirect(reverse('create_profile'))
+            return redirect('create_profile')
 
         posts = StatusPost.objects.all().filter(user_profile=user_profile).order_by('-post_date')
         for post in posts:
             comments += StatusComment.objects.all().filter(status_post=post.id)
+            comment_forms[post.id] = StatusCommentForm()
 
-        if post_form.is_valid():
-            status_post = post_form.save(commit=False)
-            status_post.user_profile = user_profile
-            status_post.save()
-            return redirect(reverse('home'))
+        if 'add_comment_redirect_post_id' in request.session:
+            post_id = int(request.session.pop('add_comment_redirect_post_id'))
+            comment_forms[post_id] = StatusCommentForm(request.POST)
+
+            comment_form = comment_forms[post_id]
+            comment_form.is_valid()
+            errors = comment_form.errors
+
+            post_form = StatusPostForm()
         else:
-            errors = post_form.errors
+            post_form = StatusPostForm(request.POST or None)
+
+            if post_form.is_valid():
+                status_post = post_form.save(commit=False)
+                status_post.user_profile = user_profile
+                status_post.save()
+                return redirect('home')
+            else:
+                errors = post_form.errors
 
         context = {
-            'comment_form': comment_form,
             'post_form': post_form,
             'errors': errors,
             'posts': posts,
             'comments': comments,
+            'comment_forms': comment_forms,
         }
 
     return render(request, 'network/index.html', context)
@@ -50,23 +60,16 @@ def home(request):
 def add_comment(request, post_id):
 
     if request.method != 'POST':
-        return redirect(reverse('home'))
+        return redirect('home')
 
-    post_form = StatusPostForm()
-    comment_form = StatusCommentForm(request.POST)
-    errors = None
-    comments = []
-    user_profile = None
     status_post = StatusPost.objects.get(id=post_id)
 
     try:
         user_profile = UserProfile.objects.get(user=request.user.id)
     except UserProfile.DoesNotExist:
-        return redirect(reverse('create_profile'))
+        return redirect('create_profile')
 
-    posts = StatusPost.objects.all().filter(user_profile=user_profile).order_by('-post_date')
-    for post in posts:
-            comments += StatusComment.objects.all().filter(status_post=post.id)
+    comment_form = StatusCommentForm(request.POST)
 
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)
@@ -75,14 +78,6 @@ def add_comment(request, post_id):
         comment.user_profile = user_profile
         comment.save()
     else:
-        errors = comment_form.errors
-        context = {
-            'comment_form': comment_form,
-            'post_form': post_form,
-            'errors': errors,
-            'posts': posts,
-            'comments': comments,
-        }
-        return render(request, 'network/index.html', context)
+        request.session['add_comment_redirect_post_id'] = post_id
 
-    return redirect(reverse('home'))
+    return redirect('home')
