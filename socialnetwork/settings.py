@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     # My apps
     'network',
+    'notifications',
     'profiles',
     # Third party apps
     'crispy_forms',

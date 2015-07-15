@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 {% load staticfiles %}
+{% load notifications_extras %}
 
 <html lang="en">
 <head>
@@ -29,13 +30,14 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          {% if user.is_staff %}
-            <li><a href="/admin/">Admin</a></li>
-          {% endif %}
           {% if user.is_authenticated %}
+            {% if user.is_staff %}
+              <li><a href="/admin/">Admin</a></li>
+            {% endif %}
             <li><a id="my_profile" href="{% url 'view_profile' user.username %}">
               My Profile
             </a></li>
+            <li><a href="">Notifications <span class="badge">{% get_notification_count user %}</span></a>
             <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
             <li><a href="{% url 'auth_logout' %}">Logout</a></li>
           {% else %}
