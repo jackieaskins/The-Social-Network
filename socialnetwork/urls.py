@@ -1,7 +1,6 @@
 from django import forms
 from django.conf import settings
 from django.conf.urls import include, url
-from django.conf.urls.static import static
 from django.contrib import admin
 
 from registration.backends.default.views import RegistrationView
@@ -29,5 +28,5 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.MEDIA_ROOT}),
     url(r'^post/', include('network.urls')),
-    url(r'^profile/', include('profiles.urls')),
+    url(r'^', include('profiles.urls')),
 ]

@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 from datetime import date
 
@@ -40,9 +40,14 @@ def create_profile(request):
 
 @login_required
 def view_profile(request, username):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user.id)
+    except UserProfile.DoesNotExist:
+        return redirect('create_profile')
+
     today = date.today()
     User = get_user_model()
-    user = User.objects.get(username=username)
+    user = get_object_or_404(User, username=username)
     user_profile = UserProfile.objects.get(user=user.id)
     born = user_profile.birthday
     age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
