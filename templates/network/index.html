@@ -34,7 +34,7 @@
   <div class="row">
     <div class="col-sm-5 status_post well">
       {% thumbnail post.user_profile.profile_picture "x50" as im %}
-        <img src="{{ im.url }}">
+        <img class="img-rounded" src="{{ im.url }}">
       {% endthumbnail %}
 
       <a href="{% url 'view_profile' post.user_profile.user.username %}">{{ post.user_profile.user.get_full_name }}</a>
@@ -65,7 +65,7 @@
       <div class="row">
         <div class="col-sm-12 status_comment">
         {% thumbnail comment.user_profile.profile_picture "x30" as im %}
-          <img src="{{ im.url }}">
+          <img class="img-rounded" src="{{ im.url }}">
         {% endthumbnail %}
         <a href="{% url 'view_profile' comment.user_profile.user.username %}">
           {{ comment.user_profile.user.get_full_name }}
@@ -96,5 +96,5 @@
 {% endblock content %}
 
 {% block extra_scripts %}
-<script src="{% static 'network/js/network-ajax.js' %}"></script>
+<script src="{% static 'network/js/index.js' %}"></script>
 {% endblock extra_scripts %}

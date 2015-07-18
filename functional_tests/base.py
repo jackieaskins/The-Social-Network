@@ -29,3 +29,8 @@ class FunctionalTest(LiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
+
+    def login(self):
+        self.browser.get(self.live_server_url + '/accounts/login')
+        self.browser.find_element_by_name('username').send_keys('sally')
+        self.browser.find_element_by_name('password').send_keys('sallyiscooler\n')

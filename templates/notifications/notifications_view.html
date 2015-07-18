@@ -1,0 +1,49 @@
+{% extends "registration/registration_base.html" %}
+
+{% load humanize %}
+{% load staticfiles %}
+
+{% block title %}Notifications{% endblock title %}
+
+{% block header_text %}Notifications{% endblock header_text %}
+
+{% block content %}
+{% if notifications %}
+{% for notification in notifications %}
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% if notification.status == 0 %}
+      <div style="cursor: pointer;" class="panel panel-primary" data-notid="{{ notification.id }}">
+      {% else %}
+      <div style="cursor: pointer;" class="panel panel-default">
+      {% endif %}
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            {{ notification.notification_type }}
+            {% if notification.status == 0 %}
+            <span class="new label label-success">New</span>
+            {% endif %}
+          </h3>
+          <span id="more_details">Click for more details...</span>
+          <span id="less_details" style="display: none;">Click for less details...</span>
+        </div>
+        <div style="display: none;" class="panel-body">
+          <p>Sent: {{ notification.send_date|naturaltime }}</p>
+          <p>{{ notification.content }}</p>
+          {% if notification.notification_type == "Friend Request" %}
+            <button type="button" class="btn btn-success">Accept</button>
+            <button type="button" class="btn btn-danger">Decline</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+{% else %}
+<p class="text-center">You don't have any notifications at this moment!</p>
+{% endif %}
+{% endblock content %}
+
+{% block extra_scripts %}
+<script src="{% static 'notifications/js/notifications_view.js' %}"></script>
+{% endblock extra_scripts %}

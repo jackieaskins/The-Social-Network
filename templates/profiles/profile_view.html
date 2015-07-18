@@ -16,7 +16,7 @@
   <div class="row">
     <div class="col-sm-6 col-sm-offset-3 text-center">
       {% thumbnail user_profile.profile_picture "400" upscale=False as im %}
-        <img class="center-block img-responsive" src="{{ im.url }}">
+        <img class="center-block img-responsive img-rounded" src="{{ im.url }}">
       {% endthumbnail %}
       <br />
       <h4>Full Name: {{ user_profile.user.get_full_name }}</h4>

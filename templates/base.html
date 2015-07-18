@@ -35,9 +35,11 @@
               <li><a href="/admin/">Admin</a></li>
             {% endif %}
             <li><a id="my_profile" href="{% url 'view_profile' user.username %}">
-              My Profile
+              {% if user.first_name %}{{ user.first_name }}{% else %}My Profile{% endif %}
             </a></li>
-            <li><a href="">Notifications <span class="badge">{% get_notification_count user %}</span></a>
+            <li><a id="my_notifications" href="{% url 'view_notifications' %}">
+              Notifications <span id="num_nots" class="badge">{% get_notification_count user %}</span>
+            </a></li>
             <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
             <li><a href="{% url 'auth_logout' %}">Logout</a></li>
           {% else %}
