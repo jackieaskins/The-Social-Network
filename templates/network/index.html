@@ -6,6 +6,10 @@
 {% load thumbnail %}
 {% load network_extras %}
 
+{% block extra_stylesheets %}
+  <link href="{% static 'network/css/index.css' %}" type="text/css" rel="stylesheet">
+{% endblock extra_stylesheets %}
+
 {% block header %}
   <br />
   {% if not user.is_authenticated %}
@@ -50,9 +54,9 @@
       <hr />
       {{ post.likes }} likes
 
-      <form style="display: none;" id="comment_box" method="post" action="{% url 'add_comment' post.id %}">
-        <br /><br />
+      <form class="comment_box" method="post" action="{% url 'add_comment' post.id %}">
         {% csrf_token %}
+        <br /><br />
         {{ comment_forms|get_item:post.id|crispy }}
         <button type="submit" class="btn btn-primary btn-sm pull-right">Comment</button>
         <br /><br />

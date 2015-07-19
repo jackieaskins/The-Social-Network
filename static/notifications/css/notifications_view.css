@@ -1,0 +1,11 @@
+.panel {
+  cursor: pointer;
+}
+
+.glyphicon-chevron-down {
+  display: none;
+}
+
+.less_details {
+  display: none;
+}

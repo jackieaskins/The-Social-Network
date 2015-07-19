@@ -1,23 +1,23 @@
 $(document).ready(function() {
+  $('.panel-body').hide();
   $('.panel-primary').on('click', function(e) {
+    e.preventDefault();
     var notid = $(this).attr('data-notid');
-    me = $(this);
+    var me = $(this);
     $.get('/notifications/read/', {notification_id: notid}, function(data) {
-      me.find('#more_details').toggle();
-      me.find('#less_details').toggle();
-      me.find('.panel-body').toggle();
-      me.find('.new').remove();
       $('#num_nots').html(data);
+      me.find('.new').remove();
       me.removeClass('panel-primary');
       me.addClass('panel-default');
     });
-    e.preventDefault();
   });
 
-  $('.panel-default').on('click', function(e) {
-    $(this).find('#more_details').toggle();
-    $(this).find('#less_details').toggle();
-    $(this).find('.panel-body').toggle();
+  $('.panel').on('click', function(e) {
     e.preventDefault();
+    $(this).find('.glyphicon-chevron-down').toggle();
+    $(this).find('.glyphicon-chevron-right').toggle();
+    $(this).find('.more_details').toggle();
+    $(this).find('.less_details').toggle();
+    $(this).find('.panel-body').toggle();
   });
 });

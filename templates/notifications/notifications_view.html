@@ -5,6 +5,10 @@
 
 {% block title %}Notifications{% endblock title %}
 
+{% block extra_stylesheets %}
+  <link href="{% static 'notifications/css/notifications_view.css' %}" type="text/css" rel="stylesheet">
+{% endblock extra_stylesheets %}
+
 {% block header_text %}Notifications{% endblock header_text %}
 
 {% block content %}
@@ -13,21 +17,23 @@
   <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
       {% if notification.status == 0 %}
-      <div style="cursor: pointer;" class="panel panel-primary" data-notid="{{ notification.id }}">
+      <div class="panel panel-primary" data-notid="{{ notification.id }}">
       {% else %}
-      <div style="cursor: pointer;" class="panel panel-default">
+      <div class="panel panel-default">
       {% endif %}
         <div class="panel-heading">
           <h3 class="panel-title">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="glyphicon glyphicon-chevron-down"></span>
             {{ notification.notification_type }}
             {% if notification.status == 0 %}
             <span class="new label label-success">New</span>
             {% endif %}
           </h3>
-          <span id="more_details">Click for more details...</span>
-          <span id="less_details" style="display: none;">Click for less details...</span>
+          <span class="more_details">Click for more details...</span>
+          <span class="less_details">Click for less details...</span>
         </div>
-        <div style="display: none;" class="panel-body">
+        <div class="panel-body">
           <p>Sent: {{ notification.send_date|naturaltime }}</p>
           <p>{{ notification.content }}</p>
           {% if notification.notification_type == "Friend Request" %}

@@ -20,9 +20,9 @@ def home(request):
         except UserProfile.DoesNotExist:
             return redirect('create_profile')
 
-        posts = StatusPost.objects.all().filter(user_profile=user_profile).order_by('-post_date')
+        posts = StatusPost.objects.filter(user_profile=user_profile).order_by('-post_date')
         for post in posts:
-            comments += StatusComment.objects.all().filter(status_post=post.id)
+            comments += StatusComment.objects.filter(status_post=post.id).order_by('post_date')
             comment_forms[post.id] = StatusCommentForm()
 
         if 'add_comment_redirect_post_id' in request.session:
