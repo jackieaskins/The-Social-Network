@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
 
@@ -14,7 +14,6 @@ class ViewTestCase(TestCase):
 
     def setUp(self):
         self.factory = RequestFactory()
-        User = get_user_model()
         self.user = User.objects.create(
             username='user1', password='1', first_name='John', last_name='Doe', email="jd@jd.com"
         )

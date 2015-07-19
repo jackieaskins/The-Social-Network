@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 
 from sorl.thumbnail import ImageField
@@ -10,7 +10,7 @@ class UserProfile(models.Model):
         ('F', 'Female')
     )
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    user = models.OneToOneField(User, related_name='user_profile')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     birthday = models.DateField()
     profile_picture = ImageField(blank=True, upload_to='profile_pictures')

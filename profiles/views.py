@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -25,7 +25,7 @@ def create_profile(request):
         user_profile = form.save(commit=False)
         user_profile.user = request.user
         user_profile.save()
-        return redirect(reverse('home'))
+        return redirect('home')
     else:
         errors = form.errors
 
@@ -46,7 +46,6 @@ def view_profile(request, username):
         return redirect('create_profile')
 
     today = date.today()
-    User = get_user_model()
     user = get_object_or_404(User, username=username)
     user_profile = UserProfile.objects.get(user=user.id)
     born = user_profile.birthday

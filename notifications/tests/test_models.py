@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.test import TestCase
 
 from ..models import Notification
@@ -13,7 +13,6 @@ PROF_PIC_ROOT = settings.MEDIA_ROOT + '/profile_pictures'
 
 class ModelTestCase(TestCase):
     def generate_user(self, user_name):
-        User = get_user_model()
         return User.objects.create(
             username=user_name, password='1', first_name='John', last_name='Doe', email="jd@jd.com"
         )

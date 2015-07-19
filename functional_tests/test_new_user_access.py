@@ -57,5 +57,6 @@ class NewVisitorTest(FunctionalTest):
         self.browser.find_element_by_name('gender').send_keys('M\t\n')
 
         # He is now on the homepage again, this time he sees a post box
+        self.browser.implicitly_wait(3)
         self.assertEqual(self.live_server_url + reverse('home'), self.browser.current_url)
         self.assertIn('new_post', self.browser.page_source)

@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 
 from .forms import StatusPostForm, StatusCommentForm
@@ -12,15 +11,17 @@ def home(request):
     context = {}
 
     if request.user.is_authenticated():
-        comments = []
-        comment_forms = {}
-        errors = None
+
         try:
-            user_profile = UserProfile.objects.get(user=request.user.id)
+            UserProfile.objects.get(user=request.user.id)
         except UserProfile.DoesNotExist:
             return redirect('create_profile')
 
-        posts = StatusPost.objects.filter(user_profile=user_profile).order_by('-post_date')
+        comments = []
+        comment_forms = {}
+        errors = None
+
+        posts = StatusPost.objects.filter(user=request.user).order_by('-post_date')
         for post in posts:
             comments += StatusComment.objects.filter(status_post=post.id).order_by('post_date')
             comment_forms[post.id] = StatusCommentForm()
@@ -39,7 +40,7 @@ def home(request):
 
             if post_form.is_valid():
                 status_post = post_form.save(commit=False)
-                status_post.user_profile = user_profile
+                status_post.user = request.user
                 status_post.save()
                 return redirect('home')
             else:
@@ -64,18 +65,12 @@ def add_comment(request, post_id):
 
     status_post = StatusPost.objects.get(id=post_id)
 
-    try:
-        user_profile = UserProfile.objects.get(user=request.user.id)
-    except UserProfile.DoesNotExist:
-        return redirect('create_profile')
-
     comment_form = StatusCommentForm(request.POST)
 
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)
         comment.status_post = status_post
         comment.user = request.user
-        comment.user_profile = user_profile
         comment.save()
     else:
         request.session['add_comment_redirect_post_id'] = post_id
