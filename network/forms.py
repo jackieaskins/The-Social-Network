@@ -8,6 +8,7 @@ class StatusPostForm(forms.ModelForm):
         widget=forms.Textarea(attrs={
             'placeholder': "Tell us what's happening!",
             'id': 'new_post',
+            'class': 'new_post',
             'rows': 5,
             'style': 'resize:none'
         }),
@@ -28,6 +29,7 @@ class StatusCommentForm(forms.ModelForm):
         widget=forms.Textarea(attrs={
             'placeholder': "Did you want to add something?",
             'id': 'new_comment',
+            'class': 'new_comment',
             'rows': 2,
             'style': 'resize:none'
         }),

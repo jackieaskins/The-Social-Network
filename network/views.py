@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
+import json
+
 from .forms import StatusPostForm, StatusCommentForm
-from .models import StatusPost, StatusComment
+from .models import StatusComment, StatusPost
 from profiles.models import UserProfile
 
 
@@ -69,7 +72,16 @@ def add_comment(request, post_id):
         comment.status_post = status_post
         comment.user = request.user
         comment.save()
+
+        if request.is_ajax():
+            comments = StatusComment.objects.filter(status_post=post_id)
+            return render(request, 'network/comments.html', {'comments': comments})
     else:
+        if request.is_ajax():
+            error_msg = "<strong>Did you change your mind? You didn't type anything...</strong>"
+            error = '<p id="error_1_id_text" class="help-block">%s</p>' % error_msg
+            return HttpResponse(error)
+
         request.session['add_comment_redirect_post_id'] = post_id
 
     return redirect('home')
