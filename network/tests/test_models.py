@@ -28,8 +28,8 @@ class StatusPostTest(ModelTestCase):
         user1 = self.generate_user('woo')
         user2 = self.generate_user('yoo')
 
-        StatusPost.objects.create(user=user1, text='The Social Network is soooooooo cool! Wooo!')
         StatusPost.objects.create(user=user2, text='I am so amazed at how much I love this site!')
+        StatusPost.objects.create(user=user1, text='The Social Network is soooooooo cool! Wooo!')
 
         saved_posts = StatusPost.objects.all()
         self.assertEqual(saved_posts.count(), 2)

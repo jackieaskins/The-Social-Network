@@ -62,25 +62,7 @@
         <br /><br />
       </form>
 
-      {% if comments %}
-      {% for comment in comments %}
-      {% if comment.status_post == post %}
-      <hr>
-      <div class="row">
-        <div class="col-sm-12 status_comment">
-        {% thumbnail comment.user.user_profile.profile_picture "x30" as im %}
-          <img class="img-rounded" src="{{ im.url }}">
-        {% endthumbnail %}
-        <a href="{% url 'view_profile' comment.user.username %}">
-          {{ comment.user.get_full_name }}
-        </a>
-         - <span id="comment_text">{{ comment.text }}</span><br /><br />
-        {{ comment.likes }} likes • <a href="">Like</a> • {{ comment.post_date|naturaltime }}
-        </div>
-      </div>
-      {% endif %}
-      {% endfor %}
-      {% endif %}
+      {% get_post_comments post.id %}
 
     </div>
   </div>

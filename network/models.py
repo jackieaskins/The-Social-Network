@@ -10,6 +10,9 @@ class StatusPost(models.Model):
     post_date = models.DateTimeField(default=now)
     update_date = models.DateTimeField(default=now)
 
+    class Meta:
+        ordering = ['-post_date']
+
     def __str__(self):
         return "%s - %s" % (self.user, self.text[:50])
 
@@ -21,6 +24,9 @@ class StatusComment(models.Model):
     likes = models.PositiveIntegerField(default=0)
     post_date = models.DateTimeField(default=now)
     update_date = models.DateTimeField(default=now)
+
+    class Meta:
+        ordering = ['post_date']
 
     def __str__(self):
         return "%s - %s" % (self.user, self.text[:50])
