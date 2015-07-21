@@ -52,7 +52,13 @@
         <span class="glyphicon glyphicon-comment"></span> Comment
       </button>
       <hr />
-      {{ post.likes }} likes
+      {% if post.likes.count == 0 %}
+      0 people like this
+      {% elif post.likes.count == 1 %}
+      <a href="">1 person</a> likes this
+      {% else %}
+      <a href="">{{ post.likes.count }} people</a> like this
+      {% endif %}
 
       <form class="comment_box" method="post" action="{% url 'add_comment' post.id %}">
         {% csrf_token %}

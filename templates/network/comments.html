@@ -13,7 +13,14 @@
     {{ comment.user.get_full_name }}
   </a>
    - <span id="comment_text">{{ comment.text }}</span><br /><br />
-  {{ comment.likes }} likes • <a href="">Like</a> • {{ comment.post_date|naturaltime }}
+  {% if comment.likes.count == 0 %}
+  0 likes
+  {% elif comment.likes.count == 1 %}
+  <a href="">1 like</a>
+  {% else %}
+  <a href="">{{ comment.likes.count }} likes</a>
+  {% endif %}
+   • <a href="">Like</a> • {{ comment.post_date|naturaltime }}
   </div>
 </div>
 {% endfor %}
