@@ -2,8 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-import json
-
 from .forms import StatusPostForm, StatusCommentForm
 from .models import StatusComment, StatusPost
 from profiles.models import UserProfile
@@ -20,41 +18,64 @@ def home(request):
         except UserProfile.DoesNotExist:
             return redirect('create_profile')
 
-        comment_forms = {}
-        errors = None
+    comment_forms = {}
+    errors = None
 
-        posts = StatusPost.objects.filter(user=request.user)
-        for post in posts:
-            comment_forms[post.id] = StatusCommentForm()
+    posts = StatusPost.objects.filter(user=request.user.id)
+    for post in posts:
+        comment_forms[post.id] = StatusCommentForm()
 
-        if 'add_comment_redirect_post_id' in request.session:
-            post_id = int(request.session.pop('add_comment_redirect_post_id'))
-            comment_forms[post_id] = StatusCommentForm(request.POST)
+    if 'post_form_error' in request.session:
+        request.session.pop('post_form_error')
+        post_form = StatusPostForm(request.POST)
 
-            comment_form = comment_forms[post_id]
-            comment_form.is_valid()
-            errors = comment_form.errors
+        post_form.is_valid()
+        errors = post_form.errors
+    elif 'add_comment_redirect_post_id' in request.session:
+        post_id = int(request.session.pop('add_comment_redirect_post_id'))
+        comment_forms[post_id] = StatusCommentForm(request.POST)
 
-            post_form = StatusPostForm()
-        else:
-            post_form = StatusPostForm(request.POST or None)
+        comment_form = comment_forms[post_id]
+        comment_form.is_valid()
+        errors = comment_form.errors
 
-            if post_form.is_valid():
-                status_post = post_form.save(commit=False)
-                status_post.user = request.user
-                status_post.save()
-                return redirect('home')
-            else:
-                errors = post_form.errors
+        post_form = StatusPostForm()
+    else:
+        post_form = StatusPostForm()
 
-        context = {
-            'post_form': post_form,
-            'errors': errors,
-            'posts': posts,
-            'comment_forms': comment_forms,
-        }
+    context = {
+        'post_form': post_form,
+        'errors': errors,
+        'posts': posts,
+        'comment_forms': comment_forms,
+    }
 
     return render(request, 'network/index.html', context)
+
+
+@login_required
+def add_post(request):
+    if request.method != 'POST':
+        return redirect('home')
+
+    post_form = StatusPostForm(request.POST)
+
+    if post_form.is_valid():
+        status_post = post_form.save(commit=False)
+        status_post.user = request.user
+        status_post.save()
+
+        if request.is_ajax():
+            return HttpResponse()
+    else:
+        if request.is_ajax():
+            error_msg = "<strong>Hey there! I don't think you typed anything...</strong>"
+            error = '<p id="error_1_id_text" class="help-block">%s</p>' % error_msg
+            return HttpResponse(error)
+
+        request.session['post_form_error'] = post_form.errors
+
+    return redirect('home')
 
 
 @login_required

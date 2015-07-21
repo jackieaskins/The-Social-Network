@@ -32,8 +32,8 @@ class ReturningVisitorTest(FunctionalTest):
 
         # Sally's feeling a little overzealous and decides to comment on her
         # own post
-        self.browser.find_element_by_id('comment').click()
-        commentbox = self.browser.find_element_by_id('new_comment')
+        self.browser.find_element_by_class_name('show_comment_box').click()
+        commentbox = self.browser.find_element_by_class_name('new_comment')
         commentbox.send_keys('WOW, COMMENTS TOO?\t\n')
 
         # After posting, she finds that her comment is on the page
@@ -46,6 +46,7 @@ class ReturningVisitorTest(FunctionalTest):
         postbox.send_keys('I AM SOOOOOO IMPRESSED\t\n')
 
         # Again, her post appears on the page, above the other post
+        self.browser.implicitly_wait(3)
         posts = self.browser.find_elements_by_class_name('status_post')
         self.assertIn('I AM SOOOOOO IMPRESSED', posts[0].text)
 

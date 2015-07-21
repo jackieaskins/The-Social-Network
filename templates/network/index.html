@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% load staticfiles %}
 {% load crispy_forms_tags %}
 {% load humanize %}
-{% load thumbnail %}
 {% load network_extras %}
+{% load staticfiles %}
+{% load thumbnail %}
 
 {% block extra_stylesheets %}
   <link href="{% static 'network/css/index.css' %}" type="text/css" rel="stylesheet">
@@ -20,11 +20,11 @@
 {% endblock header %}
 
 {% block content %}
-  {% if user.is_authenticated %}
+{% if user.is_authenticated %}
   <div class="row">
     <div class="col-sm-5">
       <p>Hey {% if user.first_name %}{{ user.first_name }}{% else %}{{ user }}{% endif %}, something on your mind?</p>
-      <form method="post" action="">
+      <form id="post_box" method="post" action="{% url 'add_post' %}">
         {% csrf_token %}
         {{ post_form|crispy }}
         <button type="submit" class="btn btn-primary pull-right post_button">Post</button>
@@ -48,7 +48,7 @@
       <button type="button" class="btn btn-primary btn-xs" id="status_like">
         <span class="glyphicon glyphicon-thumbs-up"></span> Like
       </button>
-      <button id="comment" class="btn btn-primary btn-xs" type="button">
+      <button class="btn btn-primary btn-xs show_comment_box" type="button">
         <span class="glyphicon glyphicon-comment"></span> Comment
       </button>
       <hr />
@@ -69,9 +69,11 @@
     </div>
   </div>
   {% endfor %}
+  {% else %}
+  <p>No posts yet. Why not change that?</p>
   {% endif %}
 
-  {% else %}
+{% else %}
   <div class="row">
     <div class="col-sm-4 col-sm-offset-1">
       <h3>The Social Network (TSN) is the social network of the future. If you aren't a part of it yet, you're missing out. But have no fear, it's not too late. <a id="register" href="{% url 'registration_register' %}">Register</a> today!</h3>
@@ -80,7 +82,7 @@
       <h3>If you're already registered, then all of that doesn't pertain to you. In fact, we here at TSN really appreciate you. So go ahead and <a id="login" href="{% url 'auth_login' %}">login</a>.</h3>
     </div>
   </div>
-  {% endif %}
+{% endif %}
 {% endblock content %}
 
 {% block extra_scripts %}
