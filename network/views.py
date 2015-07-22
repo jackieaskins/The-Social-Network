@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms import StatusPostForm, StatusCommentForm
-from .models import StatusComment, StatusPost
+from .models import CommentLike, PostLike, StatusComment, StatusPost
 from profiles.models import UserProfile
 
 
@@ -104,5 +104,51 @@ def add_comment(request, post_id):
             return HttpResponse(error)
 
         request.session['add_comment_redirect_post_id'] = post_id
+
+    return redirect('home')
+
+
+@login_required
+def like_post(request, post_id):
+
+    if request.method != 'POST':
+        return redirect('home')
+
+    status_post = get_object_or_404(StatusPost, id=post_id)
+
+    try:
+        like = PostLike.objects.filter(status_post=status_post).get(user=request.user)
+        like.delete()
+    except PostLike.DoesNotExist:
+        PostLike.objects.create(status_post=status_post, user=request.user)
+
+    if request.is_ajax():
+        if status_post.likes.count() == 1:
+            return HttpResponse('1 person likes this')
+        else:
+            return HttpResponse("%d people like this" % status_post.likes.count())
+
+    return redirect('home')
+
+
+@login_required
+def like_comment(request, comment_id):
+
+    if request.method != 'POST':
+        return redirect('home')
+
+    status_comment = get_object_or_404(StatusComment, id=comment_id)
+
+    try:
+        like = CommentLike.objects.filter(status_comment=status_comment).get(user=request.user)
+        like.delete()
+    except CommentLike.DoesNotExist:
+        CommentLike.objects.create(status_comment=status_comment, user=request.user)
+
+    if request.is_ajax():
+        if status_comment.likes.count() == 1:
+            return HttpResponse('1 like')
+        else:
+            return HttpResponse("%d likes" % status_comment.likes.count())
 
     return redirect('home')

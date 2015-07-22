@@ -1,26 +1,35 @@
 {% load thumbnail %}
 {% load humanize %}
+{% load network_extras %}
 
 {% if comments %}
 {% for comment in comments %}
 <hr>
 <div class="row">
   <div class="col-sm-12 status_comment">
-  {% thumbnail comment.user.user_profile.profile_picture "x30" as im %}
-    <img class="img-rounded" src="{{ im.url }}">
-  {% endthumbnail %}
-  <a href="{% url 'view_profile' comment.user.username %}">
-    {{ comment.user.get_full_name }}
-  </a>
-   - <span id="comment_text">{{ comment.text }}</span><br /><br />
-  {% if comment.likes.count == 0 %}
-  0 likes
-  {% elif comment.likes.count == 1 %}
-  <a href="">1 like</a>
-  {% else %}
-  <a href="">{{ comment.likes.count }} likes</a>
-  {% endif %}
-   • <a href="">Like</a> • {{ comment.post_date|naturaltime }}
+    {% thumbnail comment.user.user_profile.profile_picture "x30" as im %}
+      <img class="img-rounded" src="{{ im.url }}">
+    {% endthumbnail %}
+    <a href="{% url 'view_profile' comment.user.username %}">
+      {{ comment.user.get_full_name }}
+    </a>
+    <span>-</span>
+    <span>{{ comment.text }}<br /><br /></span>
+    <span class="comment_likes inline">
+      {% if comment.likes.count == 1 %}
+      1 like
+      {% else %}
+      {{ comment.likes.count }} likes
+      {% endif %}
+    </span>
+    <span class="inline">•</span>
+    <form class="inline like_comment" action="{% url 'like_comment' comment.id %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-link btn-mylink like_comment_btn">
+        {% if user|check_has_liked_comment:comment.id %}Unlike{% else %}Like{% endif %}
+      </button>
+    </form>
+    <span class="inline">• {{ comment.post_date|naturaltime }}</span>
   </div>
 </div>
 {% endfor %}

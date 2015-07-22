@@ -42,23 +42,29 @@
       {% endthumbnail %}
 
       <a href="{% url 'view_profile' post.user.username %}">{{ post.user.get_full_name }}</a>
-       - {{ post.post_date|naturaltime }}
-      <br /><br />
-      <span id="post_text">{{ post.text }}</span><br /><br />
-      <button type="button" class="btn btn-primary btn-xs" id="status_like">
-        <span class="glyphicon glyphicon-thumbs-up"></span> Like
-      </button>
-      <button class="btn btn-primary btn-xs show_comment_box" type="button">
+      <span>- {{ post.post_date|naturaltime }}<br /><br /></span>
+      <span class="post_text">{{ post.text }}</span><br /><br />
+      <form class="like_post inline" method="POST" action="{% url 'like_post' post.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-xs like_status_btn">
+          {% if request.user|check_has_liked_post:post.id %}
+            <span class="glyphicon glyphicon-thumbs-down"></span> Unlike
+          {% else %}
+            <span class="glyphicon glyphicon-thumbs-up"></span> Like
+          {% endif %}
+        </button>
+      </form>
+      <button class="btn btn-primary btn-xs show_comment_box" type="button" class="inline">
         <span class="glyphicon glyphicon-comment"></span> Comment
       </button>
       <hr />
-      {% if post.likes.count == 0 %}
-      0 people like this
-      {% elif post.likes.count == 1 %}
-      <a href="">1 person</a> likes this
-      {% else %}
-      <a href="">{{ post.likes.count }} people</a> like this
-      {% endif %}
+      <span class="post_likes">
+        {% if post.likes.count == 1 %}
+        1 person likes this
+        {% else %}
+        {{ post.likes.count }} people like this
+        {% endif %}
+      </span>
 
       <form class="comment_box" method="post" action="{% url 'add_comment' post.id %}">
         {% csrf_token %}
