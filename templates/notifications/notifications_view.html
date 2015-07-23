@@ -7,6 +7,9 @@
 
 {% block extra_stylesheets %}
   <link href="{% static 'notifications/css/notifications_view.css' %}" type="text/css" rel="stylesheet">
+  <noscript>
+    <link href="{% static 'notifications/css/notifications_view-no-js.css' %}" type="text/css" rel="stylesheet">
+  </noscript>
 {% endblock extra_stylesheets %}
 
 {% block header_text %}Notifications{% endblock header_text %}

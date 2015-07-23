@@ -8,6 +8,9 @@
 
 {% block extra_stylesheets %}
   <link href="{% static 'network/css/index.css' %}" type="text/css" rel="stylesheet">
+  <noscript>
+    <link href="{% static 'network/css/index-no-js.css' %}" type="text/css" rel="stylesheet">
+  </noscript>
 {% endblock extra_stylesheets %}
 
 {% block header %}
@@ -43,7 +46,7 @@
 
       <a href="{% url 'view_profile' post.user.username %}">{{ post.user.get_full_name }}</a>
       <span>- {{ post.post_date|naturaltime }}<br /><br /></span>
-      <span class="post_text">{{ post.text }}</span><br /><br />
+      <span class="post_text">{{ post.text }}<br /><br /></span>
       <form class="like_post inline" method="POST" action="{% url 'like_post' post.id %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary btn-xs like_status_btn">
@@ -57,7 +60,9 @@
       <button class="btn btn-primary btn-xs show_comment_box" type="button" class="inline">
         <span class="glyphicon glyphicon-comment"></span> Comment
       </button>
+
       <hr />
+
       <span class="post_likes">
         {% if post.likes.count == 1 %}
         1 person likes this

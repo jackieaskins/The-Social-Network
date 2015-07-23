@@ -2,10 +2,6 @@
   cursor: pointer;
 }
 
-.glyphicon-chevron-down {
-  display: none;
-}
-
-.less_details {
+.glyphicon-chevron-down, .less_details {
   display: none;
 }

@@ -2,6 +2,10 @@
   display: inline;
 }
 
+.comment_likes_link, .post_likes_link {
+  cursor: pointer;
+}
+
 .btn-mylink {
   padding-left: 0;
   padding-right: 0;
