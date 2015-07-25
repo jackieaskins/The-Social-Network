@@ -1,3 +1,21 @@
+body {
+  font-size: 12px;
+  background-color: #f5f5f5;
+}
+
+hr {
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.navbar {
+  font-size: 14px;
+}
+
+.well {
+  background-color: #fff;
+}
+
 .inline {
   display: inline;
 }
@@ -16,7 +34,8 @@
 }
 
 .popover {
-  width: 400px;
+  width: 300px;
+  font-size: 12px;
 }
 
 .post_popover_content, .comment_popover_content {

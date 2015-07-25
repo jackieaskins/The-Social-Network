@@ -1,39 +1,80 @@
 $(document).ready(function() {
   $('.comment_box').hide();
 
-  $('.show_comment_box').on('click', function() {
+  // Show the comment form
+  $('.show_comment_box').click(function() {
     $(this).parent().find('.comment_box').toggle();
     return false;
   });
 
-  $('#new_post').on('keyup', remove_errors);
-  $('.new_comment').on('keyup', remove_errors);
+  // Shorten posts
+  $('.post_text').each(function(){
+    var me = $(this);
+    var max_length = 325;
 
+    if(me.html().length > max_length) {
+      var short_content = $(this).html().substr(0, max_length);
+      var long_content = $(this).html().substr(max_length);
+
+      me.html(short_content +
+        '<a href="#" class="read_more"><br/>Read More</a>' +
+        '<span class="more_text" style="display:none;">' + long_content + '</span>'
+      );
+
+      me.find('a.read_more').click(function() {
+        $(this).hide();
+        $(this).parents('.post_text').find('.more_text').toggle();
+        return false;
+      });
+    }
+  });
+  $('.comment_text').each(function(){
+    var me = $(this);
+    var max_length = 125;
+
+    if(me.html().length > max_length) {
+      var short_content = $(this).html().substr(0, max_length);
+      var long_content = $(this).html().substr(max_length);
+
+      me.html(short_content +
+        '<a href="#" class="read_more"><br/>Read More<br /></a>' +
+        '<span class="more_text" style="display:none;">' + long_content + '</span>'
+      );
+
+      me.find('a.read_more').click(function() {
+        $(this).hide();
+        $(this).parents('.comment_text').find('.more_text').toggle();
+        return false;
+      });
+    }
+  });
+
+  // Post and comment popover settings
   $('.post_popover').popover({
     placement: 'right',
     html: 'true',
     container: 'body',
     trigger: 'focus',
     title: '<button type="button" class="close"><span aria-hidden="true">&times;</span></button>' +
-           '<h5>This post is liked by...</h5>',
+           '<h6>This post is liked by...</h6>',
     content: function() {
       return $(this).parent().find('.post_popover_content').html();
     }
   });
-
   $('.comment_popover').popover({
     placement: 'right',
     html: 'true',
     container: 'body',
     trigger: 'focus',
     title: '<button type="button" class="close"><span aria-hidden="true">&times;</span></button>' +
-           '<h5>This comment is liked by...</h5>',
+           '<h6>This comment is liked by...</h6>',
     content: function() {
       return $(this).parent().find('.comment_popover_content').html();
     }
   });
 
-  $('.like_post').on('submit', function() {
+  // Post and comment like buttons
+  $('.like_post').submit(function() {
     var me = $(this);
     var button = me.find('button');
     var span = me.find('.glyphicon');
@@ -60,8 +101,7 @@ $(document).ready(function() {
     });
     return false;
   });
-
-  $('.like_comment').on('submit', function() {
+  $('.like_comment').submit(function() {
     var me = $(this);
     var button = me.find('button');
     $.ajax({
@@ -87,7 +127,8 @@ $(document).ready(function() {
     return false;
   });
 
-  $('.comment_box').on('submit', function() {
+  // Make comments and posts
+  $('.comment_box').submit(function() {
     var me = $(this);
     $.ajax({
       type: me.attr('method'),
@@ -111,8 +152,7 @@ $(document).ready(function() {
     });
     return false;
   });
-
-  $('#post_box').on('submit', function() {
+  $('#post_box').submit(function() {
     var me = $(this);
     $.ajax({
       type: me.attr('method'),
@@ -133,6 +173,10 @@ $(document).ready(function() {
     });
     return false;
   });
+
+  // Remove any form errors when typing
+  $('#new_post').keyup(remove_errors);
+  $('.new_comment').keyup(remove_errors);
 
   function remove_errors() {
     var me = $(this);

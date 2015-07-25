@@ -7,29 +7,36 @@
 <hr>
 <div class="row">
   <div class="col-sm-12 status_comment">
-    {% thumbnail comment.user.user_profile.profile_picture "x30" as im %}
-      <img class="img-rounded" src="{{ im.url }}">
-    {% endthumbnail %}
-    <a href="{% url 'view_profile' comment.user.username %}">
-      {{ comment.user.get_full_name }}
-    </a>
-    <span>-</span>
-    <span>{{ comment.text }}<br /><br /></span>
+    <div class="media">
+      <div class="media-left">
+        {% thumbnail comment.user.user_profile.profile_picture "x30" as im %}
+          <img class="media-object" src="{{ im.url }}">
+        {% endthumbnail %}
+      </div>
+      <div class="media-body">
+        <a href="{% url 'view_profile' comment.user.username %}">
+          {{ comment.user.get_full_name }}
+        </a>
+        <span>-</span>
+        <span class="comment_text">{{ comment.text }}<br /></span>
 
-    <a tabindex="0" class="comment_popover clickable" data-toggle="popover">
-      <span class="comment_likes inline" id="comment_likes_{{ comment.id }}">
-        {{ comment.likes.count }} like{{ comment.likes.count|pluralize }}
-      </span>
-    </a>
+        <a tabindex="0" class="comment_popover clickable" data-toggle="popover">
+          <span class="comment_likes inline" id="comment_likes_{{ comment.id }}">
+            {{ comment.likes.count }} like{{ comment.likes.count|pluralize }}
+          </span>
+        </a>
 
-    <span class="inline">•</span>
-    <form class="inline like_comment" action="{% url 'like_comment' comment.id %}" method="post">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-link btn-mylink like_comment_btn">
-        {% if user|check_has_liked_comment:comment.id %}Unlike{% else %}Like{% endif %}
-      </button>
-    </form>
-    <span class="inline">• {{ comment.post_date|naturaltime }}</span>
+        <span class="inline">•</span>
+        <form class="inline like_comment" action="{% url 'like_comment' comment.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-xs btn-link btn-mylink like_comment_btn">
+            {% if user|check_has_liked_comment:comment.id %}Unlike{% else %}Like{% endif %}
+          </button>
+        </form>
+        <span class="inline">• {{ comment.post_date|naturaltime|up_to_comma }}</span>
+
+      </div>
+    </div>
 
     <div class="comment_popover_content" id="comment_popover_content_{{ comment.id }}">
       {% if comment.id|get_comment_likes_user_list %}

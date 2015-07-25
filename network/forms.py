@@ -8,8 +8,8 @@ class StatusPostForm(forms.ModelForm):
         widget=forms.Textarea(attrs={
             'placeholder': "Tell us what's happening!",
             'id': 'new_post',
-            'rows': 5,
-            'style': 'resize:none'
+            'rows': 4,
+            'style': 'resize:none; font-size:12px;'
         }),
         error_messages={'required': "Hey there! I don't think you typed anything..."}
     )
@@ -30,7 +30,7 @@ class StatusCommentForm(forms.ModelForm):
             'id': 'new_comment',
             'class': 'new_comment',
             'rows': 2,
-            'style': 'resize:none'
+            'style': 'resize:none; font-size:12px;'
         }),
         error_messages={'required': "Did you change your mind? You didn't type anything..."}
     )

@@ -25,12 +25,12 @@
 {% block content %}
 {% if user.is_authenticated %}
   <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-5 col-sm-offset-3">
       <p>Hey {% if user.first_name %}{{ user.first_name }}{% else %}{{ user }}{% endif %}, something on your mind?</p>
       <form id="post_box" method="post" action="{% url 'add_post' %}">
         {% csrf_token %}
         {{ post_form|crispy }}
-        <button type="submit" class="btn btn-primary pull-right post_button">Post</button>
+        <button type="submit" class="btn btn-primary btn-sm pull-right post_button">Post</button>
       </form>
     </div>
   </div>
@@ -39,17 +39,27 @@
   {% if posts %}
   {% for post in posts %}
   <div class="row">
-    <div class="col-sm-5 status_post well">
-      {% thumbnail post.user.user_profile.profile_picture "x50" as im %}
-        <img class="img-rounded" src="{{ im.url }}">
-      {% endthumbnail %}
+    <div class="col-sm-5 col-sm-offset-3 status_post well">
+      <div class="media">
+        <div class="media-left">
+          {% thumbnail post.user.user_profile.profile_picture "x40" as im %}
+            <img class="media-object" src="{{ im.url }}" alt="{{ post.user.get_full_name }}">
+          {% endthumbnail %}
+        </div>
 
-      <a href="{% url 'view_profile' post.user.username %}">{{ post.user.get_full_name }}</a>
-      <span>- {{ post.post_date|naturaltime }}<br /><br /></span>
-      <span class="post_text">{{ post.text }}<br /><br /></span>
+        <div class="media-body">
+          <h6 class="media-heading">
+            <a href="{% url 'view_profile' post.user.username %}">{{ post.user.get_full_name }}</a><br />
+            {{ post.post_date|naturaltime|up_to_comma }}
+          </h6>
+        </div>
+      </div>
+
+      <div class="post_text">{{ post.text }}<br /></div>
+
       <form class="like_post inline" method="POST" action="{% url 'like_post' post.id %}">
         {% csrf_token %}
-        <button type="submit" data-postid="{{ post.id }}" class="btn btn-primary btn-xs like_status_btn">
+        <button type="submit" data-postid="{{ post.id }}" class="btn btn-link btn-xs like_status_btn">
           {% if request.user|check_has_liked_post:post.id %}
             <span class="glyphicon glyphicon-thumbs-down"></span> Unlike
           {% else %}
@@ -57,7 +67,8 @@
           {% endif %}
         </button>
       </form>
-      <button class="btn btn-primary btn-xs show_comment_box" type="button" class="inline">
+
+      <button class="btn btn-link btn-xs show_comment_box" type="button" class="inline">
         <span class="glyphicon glyphicon-comment"></span> Comment
       </button>
 
@@ -71,9 +82,9 @@
 
       <form class="comment_box" method="post" action="{% url 'add_comment' post.id %}">
         {% csrf_token %}
-        <br /><br />
+        <br />
         {{ comment_forms|get_item:post.id|crispy }}
-        <button type="submit" class="btn btn-primary btn-sm pull-right">Comment</button>
+        <button type="submit" class="btn btn-primary btn-xs pull-right">Comment</button>
         <br /><br />
       </form>
 

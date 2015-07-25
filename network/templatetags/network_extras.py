@@ -11,6 +11,14 @@ def get_item(dictionary, key):
 
 
 @register.filter
+def up_to_comma(natural_time):
+    if ',' in natural_time:
+        return natural_time.split(',')[0] + ' ago'
+    else:
+        return natural_time
+
+
+@register.filter
 def check_has_liked_post(user, post_id):
     likes = PostLike.objects.filter(status_post=post_id)
     liked = False
