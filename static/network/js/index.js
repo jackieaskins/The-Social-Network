@@ -9,6 +9,30 @@ $(document).ready(function() {
   $('#new_post').on('keyup', remove_errors);
   $('.new_comment').on('keyup', remove_errors);
 
+  $('.post_popover').popover({
+    placement: 'right',
+    html: 'true',
+    container: 'body',
+    trigger: 'focus',
+    title: '<button type="button" class="close"><span aria-hidden="true">&times;</span></button>' +
+           '<h5>This post is liked by...</h5>',
+    content: function() {
+      return $(this).parent().find('.post_popover_content').html();
+    }
+  });
+
+  $('.comment_popover').popover({
+    placement: 'right',
+    html: 'true',
+    container: 'body',
+    trigger: 'focus',
+    title: '<button type="button" class="close"><span aria-hidden="true">&times;</span></button>' +
+           '<h5>This comment is liked by...</h5>',
+    content: function() {
+      return $(this).parent().find('.comment_popover_content').html();
+    }
+  });
+
   $('.like_post').on('submit', function() {
     var me = $(this);
     var button = me.find('button');
@@ -19,7 +43,12 @@ $(document).ready(function() {
       data: me.serialize(),
 
       success: function(data) {
-        me.parent().find('.post_likes').html(data);
+        $('#post_likes_' + data).load(' #post_likes_' + data, function() {
+          $(this).children().unwrap();
+        });
+        $('#post_popover_content_' + data).load(' #post_popover_content_' + data, function() {
+          $(this).children().unwrap();
+        });
         if(span.hasClass('glyphicon-thumbs-down')) {
           button.text('');
           button.prepend('<span class="glyphicon glyphicon-thumbs-up"></span> Like');
@@ -41,7 +70,12 @@ $(document).ready(function() {
       data: me.serialize(),
 
       success: function(data) {
-        me.parent().find('.comment_likes').html(data);
+        $('#comment_likes_' + data).load(' #comment_likes_' + data, function() {
+          $(this).children().unwrap();
+        });
+        $('#comment_popover_content_' + data).load(' #comment_popover_content_' + data, function() {
+          $(this).children().unwrap();
+        });
         if(button.text().indexOf('Unlike') != -1) {
           console.log('WOOOO');
           button.text('Like');

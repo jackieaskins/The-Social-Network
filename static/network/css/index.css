@@ -10,3 +10,15 @@
   padding-left: 0;
   padding-right: 0;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.popover {
+  width: 400px;
+}
+
+.post_popover_content, .comment_popover_content {
+  display: none;
+}

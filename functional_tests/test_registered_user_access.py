@@ -36,9 +36,13 @@ class ReturningVisitorTest(FunctionalTest):
         self.browser.find_element_by_class_name('like_status_btn').click()
 
         # Her post now has one like and the button now reads Unlike
+        self.browser.wait.until(lambda x:
+                                self.browser.find_element_by_class_name('post_likes').text ==
+                                '1 person likes this',
+                                '1 person likes this not found in .post_likes')
+        self.assertIn('Unlike', self.browser.find_element_by_class_name('like_status_btn').text,)
         self.assertIn('1 person likes this',
                       self.browser.find_element_by_class_name('post_likes').text)
-        self.assertIn('Unlike', self.browser.find_element_by_class_name('like_status_btn').text)
 
         # Sally's feeling a little overzealous and decides to comment on her
         # own post

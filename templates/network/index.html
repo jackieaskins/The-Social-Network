@@ -49,7 +49,7 @@
       <span class="post_text">{{ post.text }}<br /><br /></span>
       <form class="like_post inline" method="POST" action="{% url 'like_post' post.id %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary btn-xs like_status_btn">
+        <button type="submit" data-postid="{{ post.id }}" class="btn btn-primary btn-xs like_status_btn">
           {% if request.user|check_has_liked_post:post.id %}
             <span class="glyphicon glyphicon-thumbs-down"></span> Unlike
           {% else %}
@@ -63,13 +63,11 @@
 
       <hr />
 
-      <span class="post_likes">
-        {% if post.likes.count == 1 %}
-        1 person likes this
-        {% else %}
-        {{ post.likes.count }} people like this
-        {% endif %}
-      </span>
+      <a tabindex="0" class="post_popover clickable" data-toggle="popover">
+        <span class="post_likes" id="post_likes_{{ post.id }}">
+          {{ post.likes.count }} pe{{ post.likes.count|pluralize:"rson likes,ople like" }} this
+        </span>
+      </a>
 
       <form class="comment_box" method="post" action="{% url 'add_comment' post.id %}">
         {% csrf_token %}
@@ -83,8 +81,19 @@
         {% get_post_comments post.id %}
       </div>
 
+      <div class="post_popover_content" id="post_popover_content_{{ post.id }}">
+        {% if post.id|get_post_likes_user_list %}
+          {% for name in post.id|get_post_likes_user_list %}
+            <a href="{% url 'view_profile' name.username %}">{{ name.get_full_name }}</a><br />
+          {% endfor %}
+        {% else %}
+          No one yet.
+        {% endif %}
+      </div>
+
     </div>
   </div>
+
   {% endfor %}
   {% else %}
   <p>No posts yet. Why not change that?</p>

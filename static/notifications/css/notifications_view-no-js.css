@@ -5,3 +5,7 @@
 .glyphicon-chevron-right {
   display: none;
 }
+
+.panel {
+  cursor: default;
+}

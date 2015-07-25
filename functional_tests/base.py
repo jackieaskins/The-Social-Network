@@ -1,6 +1,7 @@
 from django.test import LiveServerTestCase
 
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
 
 from profiles.models import UserProfile
 from registration.users import UserModel
@@ -14,6 +15,7 @@ class FunctionalTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
+        self.browser.wait = WebDriverWait(self.browser, 10)
         sally = UserModel().objects.create_user(
             first_name='Sally',
             last_name='Hayes',

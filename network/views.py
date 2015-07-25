@@ -123,10 +123,7 @@ def like_post(request, post_id):
         PostLike.objects.create(status_post=status_post, user=request.user)
 
     if request.is_ajax():
-        if status_post.likes.count() == 1:
-            return HttpResponse('1 person likes this')
-        else:
-            return HttpResponse("%d people like this" % status_post.likes.count())
+        return HttpResponse(post_id)
 
     return redirect('home')
 
@@ -146,9 +143,6 @@ def like_comment(request, comment_id):
         CommentLike.objects.create(status_comment=status_comment, user=request.user)
 
     if request.is_ajax():
-        if status_comment.likes.count() == 1:
-            return HttpResponse('1 like')
-        else:
-            return HttpResponse("%d likes" % status_comment.likes.count())
+        return HttpResponse(comment_id)
 
     return redirect('home')

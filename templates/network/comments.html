@@ -15,13 +15,13 @@
     </a>
     <span>-</span>
     <span>{{ comment.text }}<br /><br /></span>
-    <span class="comment_likes inline">
-      {% if comment.likes.count == 1 %}
-      1 like
-      {% else %}
-      {{ comment.likes.count }} likes
-      {% endif %}
-    </span>
+
+    <a tabindex="0" class="comment_popover clickable" data-toggle="popover">
+      <span class="comment_likes inline" id="comment_likes_{{ comment.id }}">
+        {{ comment.likes.count }} like{{ comment.likes.count|pluralize }}
+      </span>
+    </a>
+
     <span class="inline">•</span>
     <form class="inline like_comment" action="{% url 'like_comment' comment.id %}" method="post">
       {% csrf_token %}
@@ -30,6 +30,16 @@
       </button>
     </form>
     <span class="inline">• {{ comment.post_date|naturaltime }}</span>
+
+    <div class="comment_popover_content" id="comment_popover_content_{{ comment.id }}">
+      {% if comment.id|get_comment_likes_user_list %}
+        {% for name in comment.id|get_comment_likes_user_list %}
+          <a href="{% url 'view_profile' name.username %}">{{ name.get_full_name }}</a><br />
+        {% endfor %}
+      {% else %}
+        No one yet.
+      {% endif %}
+    </div>
   </div>
 </div>
 {% endfor %}
