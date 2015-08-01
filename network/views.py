@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms import StatusPostForm, StatusCommentForm
 from .models import CommentLike, PostLike, StatusComment, StatusPost
+from friends.models import Friendship
 from profiles.models import UserProfile
 
 
@@ -20,8 +21,14 @@ def home(request):
 
     comment_forms = {}
     errors = None
+    posts = []
+    friends = Friendship.objects.filter(from_user=request.user.id).filter(status=1)
 
-    posts = StatusPost.objects.filter(user=request.user.id)
+    for friend in friends:
+        posts.extend(StatusPost.objects.filter(user=friend.to_user.id))
+    posts.extend(StatusPost.objects.filter(user=request.user.id))
+    posts.sort(key=lambda p: p.post_date, reverse=True)
+
     for post in posts:
         comment_forms[post.id] = StatusCommentForm()
 

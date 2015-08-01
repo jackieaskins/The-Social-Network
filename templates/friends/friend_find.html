@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% load friends_extras %}
+{% load thumbnail %}
+
+{% block title %}Find Friends{% endblock title %}
+
+{% block header %}
+  <div class="page-header">
+    <h1 class="text-center">Find Friends</h1>
+  </div>
+{% endblock header %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <form action="" method="post">
+        {% csrf_token %}
+        <div class="input-group">
+          <input type="text" class="form-control" name="query"
+          placeholder="Search by first name, last name, or username">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% if results %}
+  <br />
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% if results.0 == 0 %}
+      <p class="text-center">Your search returned no results.</p>
+      {% else %}
+      <ul class="list-group">
+        {% for result in results %}
+        <li class="list-group-item">
+          <div class="media">
+              <div class="media-left">
+                {% thumbnail result.user_profile.profile_picture "40" as im %}
+                  <img class="media-object" src="{{ im.url }}" alt="{{ result.get_full_name }}">
+                {% endthumbnail %}
+              </div>
+              <div class="media-body media-middle">
+                <h4 class="media-heading">
+                  <a href="{% url 'view_profile' result.username %}">
+                    {{ result.get_full_name }}
+                  </a>
+                </h4>
+              </div>
+              {% if user != result %}
+              <div class="media-right media-middle">
+                {% if user|check_friend_status:result == 0 %}
+                <a class="btn btn-warning btn-sm">
+                  <i class="fa fa-times"></i>
+                  Cancel Request
+                </a>
+                {% elif user|check_friend_status:result == 1 %}
+                <a class="btn btn-danger btn-sm">
+                  <i class="fa fa-user-times"></i>
+                  Remove Friend
+                </a>
+                {% else %}
+                <a class="btn btn-success btn-sm">
+                  <i class="fa fa-user-plus"></i>
+                  Add Friend
+                </a>
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+{% endblock content %}

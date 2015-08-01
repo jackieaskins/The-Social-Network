@@ -15,6 +15,7 @@
 
   <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
   {% block extra_stylesheets %}{% endblock extra_stylesheets %}
 </head>
 <body>
@@ -35,13 +36,11 @@
             {% if user.is_staff %}
               <li><a href="/admin/">Admin</a></li>
             {% endif %}
-            <li><a id="my_profile" href="{% url 'view_profile' user.username %}">
-              {% if user.first_name %}{{ user.first_name }}{% else %}My Profile{% endif %}
-            </a></li>
+            <li><a id="my_profile" href="{% url 'view_profile' user.username %}">My Profile</a></li>
+            <li><a id="my_friends" href="{% url 'view_friends' user.username %}">My Friends</a></li>
             <li><a id="my_notifications" href="{% url 'view_notifications' %}">
               Notifications <span id="num_nots" class="badge">{% get_notification_count user %}</span>
             </a></li>
-            <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
             <li><a href="{% url 'auth_logout' %}">Logout</a></li>
           {% else %}
             <li><a href="{% url 'auth_login' %}">Login</a></li>

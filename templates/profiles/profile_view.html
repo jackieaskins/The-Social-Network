@@ -1,4 +1,4 @@
-{% extends "registration/registration_base.html" %}
+{% extends "base.html" %}
 
 {% load thumbnail %}
 {% load staticfiles %}
@@ -9,13 +9,17 @@
   <link href="{% static 'profiles/css/profile_view.css' %}" type="text/css" rel="stylesheet">
 {% endblock extra_stylesheets %}
 
-{% block header_text %}
-{% if user == user_profile.user %}
-  Your Profile
-{% else %}
-  <font class="capitalize_me">{{ user_profile.user.username }}</font>'s Profile
-{% endif %}
-{% endblock header_text %}
+{% block header %}
+  <div class="page-header">
+    <h1 class="text-center">
+      {% if user == user_profile.user %}
+        Your Profile
+      {% else %}
+        {{ user_profile.user|capfirst }}'s Profile
+      {% endif %}
+    </h1>
+  </div>
+{% endblock header %}
 
 {% block content %}
   <div class="row">

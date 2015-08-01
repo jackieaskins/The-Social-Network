@@ -1,4 +1,4 @@
-{% extends "registration/registration_base.html" %}
+{% extends "base.html" %}
 
 {% load humanize %}
 {% load staticfiles %}
@@ -12,7 +12,11 @@
   </noscript>
 {% endblock extra_stylesheets %}
 
-{% block header_text %}Notifications{% endblock header_text %}
+{% block header %}
+  <div class="page-header">
+    <h1 class="text-center">Notifications</h1>
+  </div>
+{% endblock header %}
 
 {% block content %}
 {% if notifications %}
