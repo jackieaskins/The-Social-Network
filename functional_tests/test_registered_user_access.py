@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
 from .base import FunctionalTest
-from notifications.models import Notification
+from profiles.models import UserProfile
+from registration.users import UserModel
 
 
 class ReturningVisitorTest(FunctionalTest):
@@ -11,7 +12,7 @@ class ReturningVisitorTest(FunctionalTest):
 
         # Sally is already a user of The Social Network (go Sally!) Since TSN
         # is so awesome, Sally comes to login
-        self.login()
+        self.login('sally', 'sallyiscooler')
 
         # She is returned to the home page
         self.assertEqual(self.browser.current_url, self.live_server_url + '/')
@@ -74,7 +75,7 @@ class ReturningVisitorTest(FunctionalTest):
     def test_registered_users_can_view_their_own_profile(self):
 
         # Sally's back and she's logging in again
-        self.login()
+        self.login('sally', 'sallyiscooler')
 
         # She decides that she wants to check out her profile now and clicks
         # the 'My Profile' link in the navigation bar
@@ -90,33 +91,46 @@ class ReturningVisitorTest(FunctionalTest):
         for value in ['Your Profile', 'Sally Hayes', 'Age:', 'Female', 'July 22, 1985']:
             self.assertIn(value, page_source)
 
-    def test_registered_users_can_view_their_own_notifications(self):
+    def test_registered_users_can_add_friends_and_accept_friend_requests(self):
 
-        # Sally logs in and notices that she doesn't have any notifications
-        self.login()
-        num_nots = self.browser.find_element_by_id('num_nots')
-        self.assertEqual('', num_nots.text)
+        # Sally is back and she's so excited because her best friend Jo Smo has
+        # just joined TSN
+        jo = UserModel().objects.create_user(username='josmo', first_name='Jo', last_name='Smo',
+                                             password='josmoyouknow', email='josmo@holup.com')
+        UserProfile.objects.create(user=jo, birthday='1985-03-15', gender='M')
+        self.login('sally', 'sallyiscooler')
 
-        # Somewhere else an old friend of Sally's decides to send her a friend request
-        sally = User.objects.get(username='sally')
-        Notification.objects.create(
-            user=sally,
-            notification_type='Friend Request',
-            content='Old Friend wants to be your friend.'
-        )
+        # Sally decides goes to view her friends and realizes that she doesn't
+        # have any :(
+        self.browser.find_element_by_id('my_friends').click()
+        self.assertIn("doesn't have any friends", self.browser.page_source)
 
-        # Sally loads the homepage again and this time she has a notification
-        self.browser.get(self.live_server_url + reverse('home'))
-        num_nots = self.browser.find_element_by_id('num_nots')
-        self.assertEqual('1', num_nots.text)
+        # To remedy this, she goes to the find friend page to find Jo
+        self.browser.find_element_by_id('find_friends').click()
+        self.browser.find_element_by_name('query').send_keys('jo smo\n')
 
-        # Sally clicks on the notification link to view her new notification
-        self.browser.find_element_by_id('my_notifications').click()
-        self.assertIn('/notifications/', self.browser.current_url)
+        # Jo Smo appears in her results and she clicks the button to add him
+        # as a friend
+        self.assertIn('Jo Smo', self.browser.find_element_by_class_name('media-heading').text)
+        self.browser.find_element_by_class_name('btn-success').click()
 
-        # She clicks on her new notification and sees that the badge displaying
-        # her 1 new notification has disappeared
-        self.browser.find_element_by_class_name('panel').click()
-        self.browser.implicitly_wait(3)
-        num_nots = self.browser.find_element_by_id('num_nots')
-        self.assertEqual('', num_nots.text)
+        # The button now reads 'Cancel Request' and is yellow
+        self.assertIn('Cancel Request', self.browser.page_source)
+        self.assertIn('btn-warning', self.browser.page_source)
+
+        # Since Sally and Jo share a computer Sally logs out and Jo logs in
+        self.browser.find_element_by_id('logout').click()
+        self.login('josmo', 'josmoyouknow')
+
+        # Jo notices that he has a notification and clicks on the link
+        notifications = self.browser.find_element_by_id('my_notifications')
+        self.assertIn('1', notifications.text)
+        notifications.click()
+
+        # He clicks on the notification on the page and accepts the request
+        self.browser.find_element_by_class_name('panel-heading').click()
+        self.browser.find_element_by_class_name('btn-success').click()
+
+        # Jo then goes to his friends and sees Sally is one of them
+        self.browser.find_element_by_id('my_friends').click()
+        self.assertIn('Sally Hayes', self.browser.find_element_by_class_name('media-heading').text)

@@ -28,7 +28,7 @@ class ViewNotificationsViewTest(ViewTestCase):
         response = view_notifications(request)
         view_html = response.content.decode()
         self.assertIn("You don't have any notifications at this moment!", view_html)
-        Notification.objects.create(user=self.user, notification_type='Friend Request',
+        Notification.objects.create(to_user=self.user, type_id=0,
                                     content='No One wants to be your friend.')
         response = view_notifications(request)
         view_html = response.content.decode()

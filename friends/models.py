@@ -6,9 +6,14 @@ from django.utils.timezone import now
 
 class Friendship(models.Model):
 
+    STATUS_CHOICES = (
+        (0, 'Pending...'),
+        (1, 'Friends')
+    )
+
     to_user = models.ForeignKey(User, related_name='friendship_set')
     from_user = models.ForeignKey(User, related_name='friends')
-    status = models.PositiveSmallIntegerField(default=0)
+    status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
     response_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:

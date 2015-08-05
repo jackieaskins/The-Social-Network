@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_ROOT}),
     url(r'^notifications/', include('notifications.urls')),
-    url(r'^', include('friends.urls')),
-    url(r'^', include('network.urls')),
-    url(r'^', include('profiles.urls')),
+    url(r'', include('friends.urls')),
+    url(r'', include('network.urls')),
+    url(r'', include('profiles.urls')),
 ]

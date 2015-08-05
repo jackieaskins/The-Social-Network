@@ -8,7 +8,7 @@ from .models import Notification
 
 @login_required
 def view_notifications(request):
-    notifications = Notification.objects.all().filter(user=request.user).filter(
+    notifications = Notification.objects.all().filter(to_user=request.user).filter(
         Q(status=0) | Q(status=1)).order_by('-send_date')
 
     context = {
@@ -26,7 +26,7 @@ def read_notification(request):
         if notification.status != 1:
             notification.status = 1
             notification.save()
-        num_new = Notification.objects.all().filter(user=request.user).filter(status=0).count()
+        num_new = Notification.objects.all().filter(to_user=request.user).filter(status=0).count()
         if num_new == 0:
             num_new = ''
         return HttpResponse(num_new)

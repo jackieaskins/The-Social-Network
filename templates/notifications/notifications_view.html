@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load humanize %}
+{% load notifications_extras %}
 {% load staticfiles %}
 
 {% block title %}Notifications{% endblock title %}
@@ -32,7 +33,7 @@
           <h3 class="panel-title">
             <span class="glyphicon glyphicon-chevron-right"></span>
             <span class="glyphicon glyphicon-chevron-down"></span>
-            {{ notification.notification_type }}
+            {{ notification.get_type_id_display }}
             {% if notification.status == 0 %}
             <span class="new label label-success">New</span>
             {% endif %}
@@ -41,11 +42,19 @@
           <span class="less_details">Click for less details...</span>
         </div>
         <div class="panel-body">
-          <p>Sent: {{ notification.send_date|naturaltime }}</p>
+          <p>Sent: {{ notification.send_date }}</p>
           <p>{{ notification.content }}</p>
-          {% if notification.notification_type == "Friend Request" %}
-            <button type="button" class="btn btn-success">Accept</button>
-            <button type="button" class="btn btn-danger">Decline</button>
+          {% if notification.id|check_is_friend_request %}
+            <form class="inline" method="POST"
+            action="{% url 'accept_request' notification.friendrequest.from_user.username %}?next={{ request.path }}">
+              {% csrf_token %}
+              <button type="submit" class="inline btn btn-success">Accept</button>
+            </form>
+            <form class="inline" method="POST"
+            action="{% url 'reject_request' notification.friendrequest.from_user.username %}?next={{ request.path }}">
+              {% csrf_token %}
+              <button type="submit" class="inline btn btn-danger">Decline</button>
+            </form>
           {% endif %}
         </div>
       </div>

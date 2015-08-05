@@ -51,22 +51,30 @@
               </div>
               {% if user != result %}
               <div class="media-right media-middle">
-                {% if user|check_friend_status:result == 0 %}
-                <a class="btn btn-warning btn-sm">
-                  <i class="fa fa-times"></i>
-                  Cancel Request
-                </a>
-                {% elif user|check_friend_status:result == 1 %}
-                <a class="btn btn-danger btn-sm">
-                  <i class="fa fa-user-times"></i>
-                  Remove Friend
-                </a>
-                {% else %}
-                <a class="btn btn-success btn-sm">
-                  <i class="fa fa-user-plus"></i>
-                  Add Friend
-                </a>
-                {% endif %}
+                <form method="post"
+                action="{% url 'edit_friendship' result.username %}?next={{ request.path }}?query={{ search_terms }}">
+                  {% csrf_token %}
+                  {% if user|check_friend_status:result == 0 %}
+                  <button type="submit" class="btn btn-warning btn-sm"
+                   onClick="return confirm('Are you sure you want to cancel your request to ' +
+                      '{{ result.get_full_name }}?');">
+                    <i class="fa fa-times"></i>
+                    Cancel Request
+                  </button>
+                  {% elif user|check_friend_status:result == 1 %}
+                  <button type="submit" class="btn btn-danger btn-sm"
+                   onClick="return confirm('Are you sure you want to remove ' +
+                      '{{ result.get_full_name }} as a friend?');">
+                    <i class="fa fa-user-times"></i>
+                    Remove Friend
+                  </button>
+                  {% else %}
+                  <button type="submit" class="btn btn-success btn-sm">
+                    <i class="fa fa-user-plus"></i>
+                    Add Friend
+                  </button>
+                  {% endif %}
+                </form>
               </div>
               {% endif %}
             </div>

@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -7,8 +6,6 @@ from profiles.models import UserProfile
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-
-PROF_PIC_ROOT = settings.MEDIA_ROOT + '/profile_pictures'
 
 
 class ModelTestCase(TestCase):
@@ -33,15 +30,15 @@ class NotificationTest(ModelTestCase):
         user2 = self.generate_user('user2')
 
         notification1 = Notification()
-        notification1.user = user1
-        notification1.notification_type = 'friend request'
+        notification1.to_user = user1
+        notification1.type_id = 0
         notification1.content = 'Bob Marley wants to be your friend.'
         notification1.status = 1
         notification1.save()
 
         notification2 = Notification()
-        notification2.user = user2
-        notification2.notification_type = 'friend request'
+        notification2.to_user = user2
+        notification2.type_id = 0
         notification2.content = 'Jose Illiad wants to be your friend.'
         notification2.save()
 
@@ -50,10 +47,10 @@ class NotificationTest(ModelTestCase):
 
         first_saved_notification = saved_notifications[0]
         second_saved_notification = saved_notifications[1]
-        self.assertEqual(first_saved_notification.user, user1)
-        self.assertEqual(second_saved_notification.user, user2)
-        self.assertEqual(first_saved_notification.notification_type, 'friend request')
-        self.assertEqual(second_saved_notification.notification_type, 'friend request')
+        self.assertEqual(first_saved_notification.to_user, user1)
+        self.assertEqual(second_saved_notification.to_user, user2)
+        self.assertEqual(first_saved_notification.type_id, 0)
+        self.assertEqual(second_saved_notification.type_id, 0)
         self.assertIn('Bob Marley', first_saved_notification.content)
         self.assertIn('Jose Illiad', second_saved_notification.content)
         self.assertEqual(first_saved_notification.status, 1)

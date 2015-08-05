@@ -25,66 +25,76 @@
 {% endblock header %}
 
 {% block content %}
-  {% if user_friends %}
-    <div class="row">
-      <div class="col-sm-6 col-sm-offset-3">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>
-          Friends ({{ user_friends.count }})
-          <a href="{% url 'find_friends' %}" class="pull-right">Find Friends</a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user_friend in user_friends %}
-        <tr>
-          <td>
-            <div class="media">
-              <div class="media-left">
-                {% thumbnail user_friend.to_user.user_profile.profile_picture "80" as im %}
-                  <img class="media-object" src="{{ im.url }}" alt="{{ user_friend.to_user.get_full_name }}">
-                {% endthumbnail %}
-              </div>
-              <div class="media-body media-middle">
-                <h4 class="media-heading">
-                  <a href="{% url 'view_profile' user_friend.to_user.username %}">
-                    {{ user_friend.to_user.get_full_name }}
-                  </a>
-                </h4>
-              </div>
-              {% if user != user_friend.to_user %}
-              <div class="media-right media-middle">
-                {% if user|check_friend_status:user_friend.to_user == 0 %}
-                <a class="btn btn-warning btn-sm">
-                  <i class="fa fa-times"></i>
-                  Cancel Request
-                </a>
-                {% elif user|check_friend_status:user_friend.to_user == 1 %}
-                <a class="btn btn-danger btn-sm">
-                  <i class="fa fa-user-times"></i>
-                  Remove Friend
-                </a>
-                {% else %}
-                <a class="btn btn-success btn-sm">
-                  <i class="fa fa-user-plus"></i>
-                  Add Friend
-                </a>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>
+            Friends ({{ user_friends.count }})
+            <a id="find_friends" href="{% url 'find_friends' %}" class="pull-right">Find Friends</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if user_friends %}
+          {% for user_friend in user_friends %}
+          <tr>
+            <td>
+              <div class="media">
+                <div class="media-left">
+                  {% thumbnail user_friend.to_user.user_profile.profile_picture "80" as im %}
+                    <img class="media-object" src="{{ im.url }}" alt="{{ user_friend.to_user.get_full_name }}">
+                  {% endthumbnail %}
+                </div>
+                <div class="media-body media-middle">
+                  <h4 class="media-heading">
+                    <a href="{% url 'view_profile' user_friend.to_user.username %}">
+                      {{ user_friend.to_user.get_full_name }}
+                    </a>
+                  </h4>
+                </div>
+                {% if user != user_friend.to_user %}
+                <div class="media-right media-middle">
+                  <form method="post"
+                  action="{% url 'edit_friendship' user_friend.to_user.username %}?next={{ request.path }}">
+                    {% csrf_token %}
+                    {% if user|check_friend_status:user_friend.to_user == 0 %}
+                    <button type="submit" class="btn btn-warning btn-sm"
+                     onClick="return confirm('Are you sure you want to cancel your request to ' +
+                      '{{ user_friend.to_user.get_full_name }}?');">
+                      <i class="fa fa-times"></i>
+                      Cancel Request
+                    </button>
+                    {% elif user|check_friend_status:user_friend.to_user == 1 %}
+                    <button type="submit" class="btn btn-danger btn-sm"
+                     onClick="return confirm('Are you sure you want to remove ' +
+                      '{{ user_friend.to_user.get_full_name }} as a friend?');">
+                      <i class="fa fa-user-times"></i>
+                      Remove Friend
+                    </button>
+                    {% else %}
+                    <button type="submit" class="btn btn-success btn-sm">
+                      <i class="fa fa-user-plus"></i>
+                      Add Friend
+                    </button>
+                    {% endif %}
+                  </form>
+                </div>
                 {% endif %}
               </div>
-              {% endif %}
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+            </td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td>
+              {{ friends_user.get_full_name }} doesn't have any friends... You should add them!
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
     </div>
-    </div>
-  {% else %}
-    <div class="text-center">
-      {{ friends_user.get_full_name }} doesn't have any friends... You should add them!
-    </div>
-  {% endif %}
+  </div>
 {% endblock content %}
