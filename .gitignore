@@ -3,3 +3,5 @@ __pycache__
 secret.py
 socialnetwork.sublime-project
 socialnetwork.sublime-workspace
+.coverage
+htmlcov

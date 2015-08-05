@@ -46,3 +46,4 @@ class UserProfileTest(ModelTestCase):
         self.assertEqual(first_profile.profile_picture, PROF_PIC_ROOT + '/default_male.png')
         self.assertEqual(second_profile.profile_picture, PROF_PIC_ROOT + '/default_female.png')
         self.assertEqual(third_profile.profile_picture, PROF_PIC_ROOT + '/dog.jpg')
+        self.assertEqual(str(first_profile), first_profile.user.username)
