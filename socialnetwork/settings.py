@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.config('MY_SECRET_KEY')
+SECRET_KEY = os.environ['MY_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -91,8 +91,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'socialnetwork_db',
-        'USER': os.config('DB_USERNAME'),
-        'PASSWORD': os.config('DB_PASSWORD'),
+        'USER': os.environ['DB_USERNAME'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
     }
 }
 
@@ -123,8 +123,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Email settings
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.config('EMAIL_USERNAME')
-EMAIL_HOST_PASSWORD = os.config('EMAIL_PASSWORD')
+EMAIL_HOST_USER = os.environ['EMAIL_USERNAME']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
