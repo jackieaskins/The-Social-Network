@@ -92,7 +92,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'socialnetwork_db',
         'USER': os.environ['DB_USERNAME'],
-        'PASSWORD': os.environ['DB_PASSWORD']
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 
