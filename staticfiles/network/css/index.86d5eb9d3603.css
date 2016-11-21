@@ -1,0 +1,43 @@
+body {
+  font-size: 12px;
+  background-color: #f5f5f5;
+}
+
+hr {
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.navbar {
+  font-size: 14px;
+}
+
+.well {
+  background-color: #fff;
+}
+
+.inline {
+  display: inline;
+}
+
+.comment_likes_link, .post_likes_link {
+  cursor: pointer;
+}
+
+.btn-mylink {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.popover {
+  width: 300px;
+  font-size: 12px;
+}
+
+.post_popover_content, .comment_popover_content {
+  display: none;
+}

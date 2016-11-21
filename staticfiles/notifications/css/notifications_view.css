@@ -1,0 +1,11 @@
+.panel-heading {
+  cursor: pointer;
+}
+
+.glyphicon-chevron-down, .less_details {
+  display: none;
+}
+
+.inline {
+  display: inline;
+}

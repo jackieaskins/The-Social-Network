@@ -1,0 +1,11 @@
+.more_details {
+  display: none;
+}
+
+.glyphicon-chevron-right {
+  display: none;
+}
+
+.panel {
+  cursor: default;
+}

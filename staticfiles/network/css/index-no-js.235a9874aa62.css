@@ -1,0 +1,9 @@
+.show_comment_box {
+  display: none;
+}
+
+.clickable, .clickable:link, .clickable:hover, .clickable:visited, .clickable:active {
+  cursor: default;
+  color: #333;
+  text-decoration: none;
+}
